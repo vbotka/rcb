@@ -13,7 +13,7 @@ if [ -d "$DST" ]; then
 	printf "$(date) [OK] $DST/* deleted \n" >> $RCB_LOG
     else
 	printf "$(date) [ERR] can't delete $DST/*\n" >> $RCB_LOG
-	cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST decryptio of backup failed on deleting $DST/*" $EMAIL
+	cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST decryptio of backup failed on deleting $DST/*" $RCB_EMAIL
 	rm $RCB_LOG_TEMP
 	exit 1
     fi
@@ -22,18 +22,18 @@ else
 	printf "$(date) [OK] $DST created \n" >> $RCB_LOG
     else
 	printf "$(date) [ERR] can't create $DST\n" >> $RCB_LOG
-	cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST mkdir -p $DST failed" $EMAIL
+	cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST mkdir -p $DST failed" $RCB_EMAIL
 	rm $RCB_LOG_TEMP
 	exit 1
     fi
 fi
 
-if ($RSYNCRYPTO $RSYNCRYPTO_PARAM_D -d -r $SRC $DST $KEYS $CRT >$RCB_LOG_TEMP 2>&1); then
+if ($RSYNCRYPTO $RSYNCRYPTO_PARAM_D -d -r $SRC $DST $RCB_KEYS $RCB_CRT >$RCB_LOG_TEMP 2>&1); then
     printf "$(date) [OK] *** Decryption from $SRC to $DST finished\n" >> $RCB_LOG
 else
     printf "$(date) [ERR] *** Decryption from $SRC to $DST finished with error\n" >> $RCB_LOG
     cat $RCB_LOG_TEMP >> $RCB_LOG
-    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST Decryption from $SRC to $DST finished with error" $EMAIL
+    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST Decryption from $SRC to $DST finished with error" $RCB_EMAIL
     rm $RCB_LOG_TEMP
     exit 1
 fi

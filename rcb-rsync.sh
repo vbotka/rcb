@@ -18,7 +18,7 @@ if ($RSYNC $RSYNC_PARAM_LOCAL -e ssh $SRC/ $DST >$RCB_LOG_TEMP 2>&1); then
 else
     printf "$(date) [ERR] Rsync from $SRC/ to $DST failed\n" >> $RCB_LOG
     cat $RCB_LOG_TEMP >> $RCB_LOG
-    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST Rsync from $SRC/ to $DST failed" $EMAIL
+    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST Rsync from $SRC/ to $DST failed" $RCB_EMAIL
     rm $RCB_LOG_TEMP
     exit 1
 fi

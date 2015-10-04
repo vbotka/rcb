@@ -12,7 +12,7 @@ if [ ! -d "$DST/$DIR" ]; then
 	printf "$(date) [OK] $DST/$DIR created\n" >> $RCB_LOG
     else
 	printf "$(date) [ERR] Can't create $DST/$DIR\n" >> $RCB_LOG
-	cat $RCB_LOG_TEMP | $MAIL -s "[ERR] Restore from backup failed on mkdir $DST/$DIR" $EMAIL
+	cat $RCB_LOG_TEMP | $MAIL -s "[ERR] Restore from backup failed on mkdir $DST/$DIR" $RCB_EMAIL
 	exit 1
     fi
 fi
@@ -21,7 +21,7 @@ if ($RSYNC $RSYNC_PARAM $SRC/$DIR/ $DST/$DIR/ >$RCB_LOG_TEMP 2>&1); then
 else
     printf "$(date) [ERR] $DIR restore to $DST/$DIR failed\n" >> $RCB_LOG
     cat $RCB_LOG_TEMP >> $RCB_LOG
-    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST $DIR restore to $DST/$DIR failed" $EMAIL
+    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST $DIR restore to $DST/$DIR failed" $RCB_EMAIL
     exit 1
 fi
 }
@@ -29,13 +29,13 @@ fi
 function restore_from_meta {
     # create empty directories
     printf "$(date) Creating empty directories in $DST\n" >$RCB_LOG_TEMP
-    for i in $(cat $SRC/$DIR/$EMPTYDIRS); do
+    for i in $(cat $SRC/$DIR/$RCB_EMPTYDIRS); do
 	if (mkdir -p $DST/$i >>$RCB_LOG_TEMP 2>&1); then
 	    printf "$(date) [OK] $DST/$i created\n" >> $RCB_LOG_TEMP
 	else
 	    printf "$(date) [ERR] mkdir -p $DST/$i failed\n" >> $RCB_LOG
 	    cat $RCB_LOG_TEMP > $RCB_LOG
-	    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST mkdir -p $DST/$i failed\n" $EMAIL
+	    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST mkdir -p $DST/$i failed\n" $RCB_EMAIL
 	    exit 1
 	fi
     done
@@ -46,22 +46,22 @@ function restore_from_meta {
     else
 	printf "$(date) [ERR] mtree from $SRC/$DIR/$MTREE_SPEC to $DST/$DIR failed\n" >> $RCB_LOG
 	cat $RCB_LOG_TEMP > $RCB_LOG
-	cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST mtree from $SRC/$DIR/$MTREE_SPEC to $DST/$DIR failed\n" $EMAIL
+	cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST mtree from $SRC/$DIR/$MTREE_SPEC to $DST/$DIR failed\n" $RCB_EMAIL
     fi
 }
 
 function restore_compare {
 printf "$(date) [OK] diff $SRC/$DIR/ and $DST/$DIR/ started\n" >> $RCB_LOG
-# printf "$RSYNC --dry-run --exclude-from=$META/$DIR/$LINKS -Hav $SRC/$DIR/ $DST/$DIR/\n" >$RCB_LOG_TEMP
+# printf "$RSYNC --dry-run --exclude-from=$META/$DIR/$RCB_LINKS -Hav $SRC/$DIR/ $DST/$DIR/\n" >$RCB_LOG_TEMP
 # TODO: fifo and sockets not excluded
 # TODO: links exclude-from doesnt work
 # TODO: check RCB_LOG_TEMP fpr pthers
-if ($RSYNC --dry-run --exclude-from=$RCB_META/$DIR/$LINKS -ahv $SRC/$DIR/ $DST/$DIR/ >$RCB_LOG_TEMP 2>&1); then
+if ($RSYNC --dry-run --exclude-from=$RCB_META/$DIR/$RCB_LINKS -ahv $SRC/$DIR/ $DST/$DIR/ >$RCB_LOG_TEMP 2>&1); then
     printf "$(date) [OK] diff $SRC/$DIR/ and $DST/$DIR/ finished\n" >> $RCB_LOG
 else
     printf "$(date) [ERR] diff $SRC/$DIR/ and $DST/$DIR/ failed\n" >> $RCB_LOG
     cat $RCB_LOG_TEMP > $RCB_LOG
-    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST diff $SRC/$DIR/ and $DST/$DIR/ failed" $EMAIL
+    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST diff $SRC/$DIR/ and $DST/$DIR/ failed" $RCB_EMAIL
 fi
 }
 
@@ -88,7 +88,7 @@ exit
 #	printf "*** [OK] $MOUNTPOINT mounted\n" >> $RCB_LOG
 #    else
 #	printf "*** [ERR] $MOUNTPOINT mount failed\n" >> $RCB_LOG
-#	cat $RCB_LOG_TEMP | mail -s "$MOUNTPOINT mount failed" $EMAIL
+#	cat $RCB_LOG_TEMP | mail -s "$MOUNTPOINT mount failed" $RCB_EMAIL
 #	exit 1
 #    fi
 # fi

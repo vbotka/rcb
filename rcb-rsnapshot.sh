@@ -38,7 +38,7 @@ if ($RSNAPSHOT $INC >$RCB_LOG_TEMP 2>&1); then
 else
     printf "$(date) [ERR] $INC backup finished with error\n" >> $RCB_LOG
     cat $RCB_LOG_TEMP >> $RCB_LOG
-    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST $INC backup finished with error" $EMAIL
+    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST $INC backup finished with error" $RCB_EMAIL
     rm $RCB_LOG_TEMP
     exit 1
 fi
