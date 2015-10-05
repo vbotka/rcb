@@ -1,0 +1,213 @@
+Below are the cut&paste notes from testing the scripts on 2 fresh
+instalations of FreeBSD 10.2 (srv, backup)
+
+# uname -a
+FreeBSD srv 10.2-RELEASE FreeBSD 10.2-RELEASE #0 r286666: Wed Aug 12
+15:26:37 UTC 2015
+root@releng1.nyi.freebsd.org:/usr/obj/usr/src/sys/GENERIC amd64
+# uname -a
+FreeBSD backup 10.2-RELEASE FreeBSD 10.2-RELEASE #0 r286666: Wed Aug 12
+15:26:37 UTC 2015
+root@releng1.nyi.freebsd.org:/usr/obj/usr/src/sys/GENERIC amd64
+
+On srv
+------
+
+  * install: bash, git, rsnapshot, rsyncrypto
+
+  * install gzip from /usr/ports/archivers/gzip make sure, that
+    RSYNCABLE option is checked
+
+  * Get RCB
+# git clone https://github.com/vbotka9/rcb
+
+  * Copy scripts to /root/bin
+# mkdir /root/bin
+# cp *.sh /root/bin/
+
+  * Configure RCB
+# cp rcb.conf /usr/local/etc
+  * Change at least the following
+# BCK_HOST="backup.example.com"
+BCK_HOST="192.168.1.10"
+BCK_USER="freebsd"
+BCK_DST="~/backup"
+RCB_HOST="srv.example.com"
+RCB_EMAIL="freebsd"
+
+  * Create directories
+# mkdir /backup
+# mkdir /restore
+
+  * Create test files
+# mkdir -p /scratch/test
+# cat /etc/passwd > /scratch/test/1
+# cat /etc/passwd > /scratch/test/2
+# cat /etc/passwd > /scratch/test/3
+
+  * Configure rsnapshot
+# cp rsnapshot.conf.example /usr/local/etc/rsnapshot.conf
+
+  * Create snapshot
+# /root/bin/rcb-rsnapshot.sh -i=hourly
+
+  * Check the log
+# tail -f /var/log/rcb-central.log
+Sun Oct  4 18:23:36 UTC 2015 [OK] *** hourly backup started
+Sun Oct  4 18:23:38 UTC 2015 [OK] *** hourly backup finished
+
+  * Check the files
+# ll /backup/srv.example.com/snapshots/hourly.0/localhost/
+total 20
+drwxr-xr-x  24 root  wheel  2560 Oct  4 18:03 etc/
+drwxr-xr-x   6 root  wheel   512 Oct  4 18:22 root/
+drwxr-xr-x   3 root  wheel   512 Oct  4 18:12 scratch/
+drwxr-xr-x   3 root  wheel   512 Aug 28 19:12 usr/
+drwxr-xr-x   3 root  wheel   512 Oct  4 17:42 var/
+
+  * Create keys for rsyncrypto
+# mkdir -p /root/cert/backup
+# cd /root/cert/backup
+# openssl req -nodes -newkey rsa:1536 -x509 -keyout backup.key -out backup.crt
+(enter required details)
+# chmod go-r backup.key
+# ll
+total 8
+-rw-r--r--  1 root  wheel  1237 Oct  4 18:30 backup.crt
+-rw-------  1 root  wheel  1306 Oct  4 18:30 backup.key
+
+  * Encrypt backup
+# /root/bin/rcb-encrypt.sh
+
+  * Check the log
+# tail -f /var/log/rcb-central.log
+Sun Oct  4 19:46:27 UTC 2015 [OK] *** Encryption of backup started
+Sun Oct  4 19:46:27 UTC 2015 [OK] /backup/meta created
+Sun Oct  4 19:46:27 UTC 2015 [OK] /backup/meta/localhost created
+Sun Oct  4 19:46:27 UTC 2015 [OK] mtree specification stored in /backup/meta/localhost/.rcb-mtree.txt
+Sun Oct  4 19:46:27 UTC 2015 [OK] empty directories stored in /backup/meta/localhost/.rcb-empty-dirs.txt
+Sun Oct  4 19:46:27 UTC 2015 [OK] links stored in /backup/meta/localhost/.rcb-links.txt
+Sun Oct  4 19:46:27 UTC 2015 [OK] fifo and sockets stored in /backup/meta/localhost/.rcb-specials.txt
+Sun Oct  4 19:46:35 UTC 2015 [OK] *** Encryption of /backup/srv.example.com/snapshots/hourly.0 finished
+
+  * Check the encrypted files
+# ls -la /backup/enc/
+...
+-rw-r--r--  1 root  wheel       628 Aug 12 15:52 FE3372172397DDDE53AEB967496B5E47
+-rw-r--r--  1 root  wheel       788 Aug 12 15:52 FEE42ADA67D1AD01CCB7DF2D2E8147C4
+-rw-r--r--  1 root  wheel       516 Aug 12 15:52 FF8CD69C316D558F66792BE1DA409621
+-rw-r--r--  1 root  wheel     18644 Oct  4 19:46 filemap
+
+  * Check the meta-data
+# ls -la /backup/meta/localhost/
+total 80
+drwxr-xr-x  2 root  wheel    512 Oct  4 19:46 .
+drwxr-xr-x  3 root  wheel    512 Oct  4 19:46 ..
+-rw-r--r--  1 root  wheel    722 Oct  4 19:46 .rcb-empty-dirs.txt
+-rw-r--r--  1 root  wheel   1516 Oct  4 19:46 .rcb-links.txt
+-rw-r--r--  1 root  wheel  63201 Oct  4 19:46 .rcb-mtree.txt
+-rw-r--r--  1 root  wheel      0 Oct  4 19:46 .rcb-specials.txt
+# ls -la /backup/meta/
+total 40
+drwxr-xr-x  3 root  wheel    512 Oct  4 19:46 .
+drwxr-xr-x  5 root  wheel    512 Oct  4 19:46 ..
+-rw-r--r--  1 root  wheel  25130 Oct  4 19:46 .rsyncrypto-export-changes
+drwxr-xr-x  2 root  wheel    512 Oct  4 19:46 localhost
+
+   * Generate ssh keys, store the public key in backup.example.com and
+     login to the backup.example.com
+# ssh-keygen
+# ssh freebsd@192.168.1.10
+
+   * Rsync encrypted data to the backup server
+# rcb-rsync.sh
+
+  * Check the log
+# tail -f /var/log/rcb-central.log
+Sun Oct  4 20:05:46 UTC 2015 [OK] *** Rsync from /backup/enc/ to freebsd@192.168.1.10:~/backup started
+Sun Oct  4 20:05:47 UTC 2015 [OK] *** Rsync from /backup/enc/ to freebsd@192.168.1.10:~/backup finished
+
+  * Check the data on the backup server
+freebsd@backup:~ % ll backup/
+...
+-rw-r--r--  1 freebsd  wheel       628 Aug 12 15:52 FE3372172397DDDE53AEB967496B5E47
+-rw-r--r--  1 freebsd  wheel       788 Aug 12 15:52 FEE42ADA67D1AD01CCB7DF2D2E8147C4
+-rw-r--r--  1 freebsd  wheel       516 Aug 12 15:52 FF8CD69C316D558F66792BE1DA409621
+-rw-r--r--  1 freebsd  wheel     18644 Oct  4 19:46 filemap
+
+   * Rsync encrypted data back from the backup server
+# rcb-rsync-back.sh
+
+  * Check the log
+# tail -f /var/log/rcb-central.log
+Sun Oct  4 20:09:55 UTC 2015 [OK] *** Rsync from freebsd@192.168.1.10:~/backup/ to /backup/enc.restored started
+Sun Oct  4 20:09:57 UTC 2015 [OK] *** Rsync from freebsd@192.168.1.10:~/backup/ to /backup/enc.restored finished
+
+  * Check the data
+# ls -la /backup/enc.restored/
+...
+-rw-r--r--  1 freebsd  wheel       628 Aug 12 15:52 FE3372172397DDDE53AEB967496B5E47
+-rw-r--r--  1 freebsd  wheel       788 Aug 12 15:52 FEE42ADA67D1AD01CCB7DF2D2E8147C4
+-rw-r--r--  1 freebsd  wheel       516 Aug 12 15:52 FF8CD69C316D558F66792BE1DA409621
+-rw-r--r--  1 freebsd  wheel     18644 Oct  4 19:46 filemap
+
+   * Decrypt the data
+# rcb-decrypt.sh
+
+   * Check the log
+# tail -f /var/log/rcb-central.log
+Sun Oct  4 20:14:50 UTC 2015 [OK] *** Dencryption from /backup/enc.restored to /backup/dec started
+Sun Oct  4 20:14:50 UTC 2015 [OK] /backup/dec created
+Sun Oct  4 20:14:54 UTC 2015 [OK] *** Decryption from /backup/enc.restored to /backup/dec finished
+
+   * Check the data
+# ls -la /backup/dec/srv.example.com/snapshots/hourly.0/localhost/
+total 28
+drwxr-xr-x   7 root  wheel   512 Oct  4 20:14 .
+drwxr-xr-x   3 root  wheel   512 Oct  4 20:14 ..
+drwxr-xr-x  18 root  wheel  2048 Oct  4 20:14 etc
+drwxr-xr-x   5 root  wheel   512 Oct  4 20:14 root
+drwxr-xr-x   3 root  wheel   512 Oct  4 20:14 scratch
+drwxr-xr-x   3 root  wheel   512 Oct  4 20:14 usr
+drwxr-xr-x   3 root  wheel   512 Oct  4 20:14 var
+
+   * Restore the data, create empty directories (links) and restore
+     ownership, groups, mode and time
+# rcb-restore.sh
+
+      * Check the log
+# tail -f /var/log/rcb-central.log
+Sun Oct  4 20:17:27 UTC 2015 [OK] *** Restore from /backup/dec/srv.example.com/snapshots/hourly.0 started
+Sun Oct  4 20:17:27 UTC 2015 [OK] Restore /backup/dec/srv.example.com/snapshots/hourly.0/localhost/ to /restore/localhost/ started
+Sun Oct  4 20:17:27 UTC 2015 [OK] /restore/localhost created
+Sun Oct  4 20:17:28 UTC 2015 [OK] localhost restored to /restore/localhost
+Sun Oct  4 20:17:28 UTC 2015 [OK] mtree applied from /backup/meta/localhost/.rcb-mtree.txt to /restore/localhost
+Sun Oct  4 20:17:28 UTC 2015 [OK] diff /backup/srv.example.com/snapshots/hourly.0/localhost/ and /restore/localhost/ started
+Sun Oct  4 20:17:28 UTC 2015 [OK] diff /backup/srv.example.com/snapshots/hourly.0/localhost/ and /restore/localhost/ finished
+Sun Oct  4 20:17:28 UTC 2015 [OK] *** Restore from /backup/dec/srv.example.com/snapshots/hourly.0 to /restore finnished
+
+   * Check the data
+# ls -la /restore/localhost/
+total 28
+drwxr-xr-x   7 root  wheel   512 Oct  4 20:14 .
+drwxr-xr-x   3 root  wheel   512 Oct  4 20:17 ..
+drwxr-xr-x  24 root  wheel  2048 Oct  4 20:17 etc
+drwxr-xr-x   6 root  wheel   512 Oct  4 20:17 root
+drwxr-xr-x   3 root  wheel   512 Oct  4 20:14 scratch
+drwxr-xr-x   3 root  wheel   512 Oct  4 20:14 usr
+drwxr-xr-x   3 root  wheel   512 Oct  4 20:14 var
+
+   * Check the log to see what are the differences
+# less /tmp/rcb-temp-restore.log
+--
+
+   * Fit /root/bin/rcb-daily-encrypt-rsync-decrypt-restore.sh your needs
+
+   * Create crontab
+# crontab -l
+MAILTO=""
+15 */4 * * *    /root/bin/rcb-rsnapshot.sh -i=hourly
+15 1   * * 1    /root/bin/rcb-rsnapshot.sh -i=weekly
+15 2   1 * *    /root/bin/rcb-rsnapshot.sh -i=monthly
+15 5   * * *    /root/bin/rcb-daily-encrypt-rsync-decrypt-restore.sh
+--
