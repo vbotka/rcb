@@ -69,13 +69,23 @@ for REMOTE in $(ls -1 $SRC); do
 	rm $RCB_LOG_TEMP_ENC
 	exit 1
     fi
-    # rsyncrypto does not store fifo and sockets
-    if (cd $SRC; $FIND . -type ps | sed "s|^\./||" | sort > $RCB_META/$REMOTE/$RCB_SPECIALS); then
-	printf "$(date) [OK] fifo and sockets stored in $RCB_META/$REMOTE/$RCB_SPECIALS\n" >> $RCB_LOG
+    # rsyncrypto does not store fifo
+    if (cd $SRC; $FIND . -type p | sed "s|^\./||" | sort > $RCB_META/$REMOTE/$RCB_FIFO); then
+	printf "$(date) [OK] fifo stored in $RCB_META/$REMOTE/$RCB_FIFO\n" >> $RCB_LOG
     else
-	printf "$(date) [ERR] find fifo and sockets failed\n" >> $RCB_LOG
+	printf "$(date) [ERR] find fifo failed\n" >> $RCB_LOG
 	cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
-	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE backup failed on finding fifo and sockets" $RCB_EMAIL
+	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE backup failed on finding fifo" $RCB_EMAIL
+	rm $RCB_LOG_TEMP_ENC
+	exit 1
+    fi
+    # rsyncrypto does not store sockets
+    if (cd $SRC; $FIND . -type s | sed "s|^\./||" | sort > $RCB_META/$REMOTE/$RCB_SOCKS); then
+	printf "$(date) [OK] sockets stored in $RCB_META/$REMOTE/$RCB_SOCKS\n" >> $RCB_LOG
+    else
+	printf "$(date) [ERR] find sockets failed\n" >> $RCB_LOG
+	cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
+	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE find sockets failed" $RCB_EMAIL
 	rm $RCB_LOG_TEMP_ENC
 	exit 1
     fi
