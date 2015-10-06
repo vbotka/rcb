@@ -1,2 +1,4 @@
 #!/usr/local/bin/bash
-echo "backup-test-mail.sh" | mail -s "backup test mail" acadmin
+
+source /usr/local/etc/rcb.conf
+echo "rcb-test-mail.sh started" |  $MAIL -s "rcb-test-mail.sh" $RCB_EMAIL
