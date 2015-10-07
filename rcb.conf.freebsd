@@ -31,7 +31,7 @@ RSYNCRYPTO_PARAM_E="--name-encrypt=$RCB_NAMES --gzip=$GZIP --export-changes=$RSY
 RSYNCRYPTO_PARAM_D="--name-encrypt=$RCB_NAMES --gzip=$GZIP --trim=2"
 
 RSYNC="/usr/local/bin/rsync"
-RSYNC_PARAM="--progress -ahv"
+RSYNC_PARAM="--progress --delete -ahv"
 # Warning from the man rsyncrypto about RSYNCRYPTO_EXPORT_CHANGES
 # (logfile). rsync version 3 starts the actual file transfer while it
 # is still transferring the file list, making the performance gain
