@@ -9,11 +9,11 @@ printf "$(date) [OK] *** Encryption of backup started\n" >> $RCB_LOG
 
 # directory to store the meta-data
 if [ -d "$RCB_META" ]; then
-    if ( rm -rf $RCB_META/* >$RCB_LOG_TEMP_ENC 2>&1); then
-	printf "$(date) [OK] $RCB_META/* deleted\n" >> $RCB_LOG
+    if ( rm -r $(find  $RCB_META -mindepth 1 -maxdepth 1) >$RCB_LOG_TEMP_ENC 2>&1); then
+	printf "$(date) [OK] files in $RCB_META deleted\n" >> $RCB_LOG
     else
-	printf "$(date) [ERR] Can't delete $RCB_META/*\n" >> $RCB_LOG
-	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] rm $RCB_META/* failed" $RCB_EMAIL
+	printf "$(date) [ERR] Can't delete files in $RCB_META\n" >> $RCB_LOG
+	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] Can't delete files in $RCB_META" $RCB_EMAIL
 	exit 1
     fi
 else

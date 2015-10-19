@@ -9,11 +9,11 @@ RCB_LOG_TEMP="$RCB_LOG_TEMP_DEC"
 printf "$(date) [OK] *** Dencryption from $SRC to $DST started\n" >> $RCB_LOG
 
 if [ -d "$DST" ]; then
-    if  (rm -rf $DST/*  >$RCB_LOG_TEMP 2>&1); then
-	printf "$(date) [OK] $DST/* deleted \n" >> $RCB_LOG
+    if ( rm -r $(find $DST -mindepth 1 -maxdepth 1) >$RCB_LOG_TEMP_ENC 2>&1); then
+	printf "$(date) [OK] files in $DST deleted \n" >> $RCB_LOG
     else
-	printf "$(date) [ERR] can't delete $DST/*\n" >> $RCB_LOG
-	cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST decryptio of backup failed on deleting $DST/*" $RCB_EMAIL
+	printf "$(date) [ERR] Can't delete files in $DST/*\n" >> $RCB_LOG
+	cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST decryption of backup failed on deleting files in $DST" $RCB_EMAIL
 	rm $RCB_LOG_TEMP
 	exit 1
     fi
