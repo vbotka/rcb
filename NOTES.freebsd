@@ -19,7 +19,7 @@ On srv
     RSYNCABLE option is checked
 
   * Get RCB
-# git clone https://github.com/vbotka9/rcb
+# git clone https://github.com/vbotka/rcb
 
   * Copy scripts to /root/bin
 # mkdir /root/bin
@@ -118,6 +118,11 @@ drwxr-xr-x  2 root  wheel    512 Oct  4 19:46 localhost
      login to the backup.example.com
 # ssh-keygen
 # ssh freebsd@192.168.1.10
+
+   * Check if rsync is installed in the backup server
+
+freebsd@backup:~ % which rsync
+/usr/local/bin/rsync
 
    * Rsync encrypted data to the backup server
 # rcb-rsync.sh

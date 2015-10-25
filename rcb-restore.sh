@@ -1,7 +1,7 @@
 #!/usr/local/bin/bash
 
 source /usr/local/etc/rcb.conf
-SRC="$RCB_DEC/$RCB_HOST/snapshots/hourly.0"
+SRC="$RCB_DEC"
 DST="$RCB_RST_ROOT"
 RCB_LOG_TEMP="$RCB_LOG_TEMP_RESTORE"
 
@@ -67,11 +67,11 @@ fi
 
 printf "$(date) [OK] *** Restore from $SRC started\n" >> $RCB_LOG
 for DIR in $(ls -1 $SRC); do
-    SRC="$RCB_DEC/$RCB_HOST/snapshots/hourly.0"
+    SRC="$RCB_DEC"
     restore_from_backup
     SRC="$RCB_META"
     restore_from_meta
-    SRC="$RCB_BCK_ROOT/$RCB_HOST/snapshots/hourly.0"
+    SRC="$RCB_BCK_ROOT/$RCB_BCK_PREFIX"
     restore_compare
 #   SRC=/
 #   restore_compare

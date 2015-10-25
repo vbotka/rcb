@@ -6,12 +6,24 @@ RCB_HOST="srv.example.com"
 RCB_EMAIL="admin"
 
 RCB_BCK_ROOT="/backup"
+RCB_BCK_PREFIX="$RCB_HOST/snapshots/hourly.0"
 RCB_ENC="$RCB_BCK_ROOT/enc"
 RCB_ENCR="$RCB_BCK_ROOT/enc.restored"
 RCB_DEC="$RCB_BCK_ROOT/dec"
 RCB_META="$RCB_BCK_ROOT/meta"
 
 RCB_RST_ROOT="/restore"
+
+# THE TRIM OPTION. When running rsyncrypto in recursive mode, the
+# directory structure under srcdir is re-created under dstdir, with
+# one directory stripped from the path.
+#
+# path length of $RCB_BCK_ROOT/$RCB_BCK_PREFIX
+RSYNCRYPTO_TRIM_E="4"
+#
+# path length of $RCB_ENCR
+RSYNCRYPTO_TRIM_D="2"
+# TODO: use awk '{print patsplit($0, array , "/")}'
 
 RCB_CRT_ROOT="/root/cert/backup"
 RCB_KEYS="$RCB_CRT_ROOT/keys"
@@ -27,8 +39,8 @@ RSYNCRYPTO="/usr/bin/rsyncrypto"
 # logfile RSYNCRYPTO_EXPORT_CHANGES.  This allows passing logfile to
 # rsync(1) using the --include-from rsync option.
 RSYNCRYPTO_EXPORT_CHANGES="$RCB_META/.rsyncrypto-export-changes"
-RSYNCRYPTO_PARAM_E="--name-encrypt=$RCB_NAMES --gzip=$GZIP --export-changes=$RSYNCRYPTO_EXPORT_CHANGES"
-RSYNCRYPTO_PARAM_D="--name-encrypt=$RCB_NAMES --gzip=$GZIP --trim=2"
+RSYNCRYPTO_PARAM_E="--name-encrypt=$RCB_NAMES --gzip=$GZIP --trim=$RSYNCRYPTO_TRIM_E --export-changes=$RSYNCRYPTO_EXPORT_CHANGES"
+RSYNCRYPTO_PARAM_D="--name-encrypt=$RCB_NAMES --gzip=$GZIP --trim=$RSYNCRYPTO_TRIM_D"
 
 RSYNC="/usr/bin/rsync"
 RSYNC_PARAM="--progress --delete -ahv"

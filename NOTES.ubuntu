@@ -10,7 +10,7 @@ On srv
   * install: git, rsnapshot, rsyncrypto, freebsd-buildutils, bsd-mailx
 
   * Get RCB
-# git clone https://github.com/vbotka9/rcb
+# git clone https://github.com/vbotka/rcb
 
   * Copy scripts to /root/bin
 # mkdir /root/bin
@@ -128,6 +128,11 @@ drwxr-xr-x 2 root root  4096 Oct  5 03:28 localhost
 
 admin@backup:~$ cat .ssh/authorized_keys
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCeKk0YIcMxM1HgUeEvaiN95TxomF1PxGrF3W3P4xoMQnhPccWgDm7JhXR2sVl8gP8vBnaMpTthHHts8unTLlclTnXo6ChYsJ97ReylvIs2qm3SVYG0+Dy3xCnhTlER9oLhbIChqM83LmSJ31PayaPIFcm1BHaOqsEPv+EhhqTnggUH6iTn81zpO4/GdKa02JCSCDAY5jjxi9ap/4+Nl2HBUE5l9KKLbBzc/ZEwnQyYmmJ+rBCWSRUv7Tzhiqxx52EgiJ1RHBV945JDiiHT9KRVj0QFlrYtCrO5xPhGrEWeR4Dfdfv2Qs4ZGi+t4x1kkzwmvHiS5iOWOgDMngtwzajv root@srv
+
+   * Check if rsync is installed on the backup server
+
+admin@backup:~$ which rsync
+/usr/local/bin/rsync
 
    * Rsync encrypted data to the backup server
 # /root/bin/rcb-rsync.sh

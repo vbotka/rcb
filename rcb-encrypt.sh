@@ -2,14 +2,14 @@
 
 source /usr/local/etc/rcb.conf
 
-SRC="$RCB_BCK_ROOT/$RCB_HOST/snapshots/hourly.0"
+SRC="$RCB_BCK_ROOT/$RCB_BCK_PREFIX"
 DST="$RCB_ENC"
 
 printf "$(date) [OK] *** Encryption of backup started\n" >> $RCB_LOG
 
 # directory to store the meta-data
 if [ -d "$RCB_META" ]; then
-    if ( rm -r $(find  $RCB_META -mindepth 1 -maxdepth 1) >$RCB_LOG_TEMP_ENC 2>&1); then
+    if ((find  $RCB_META -mindepth 1 -maxdepth 1 -exec rm -r {} \;) >$RCB_LOG_TEMP_ENC 2>&1); then
 	printf "$(date) [OK] files in $RCB_META deleted\n" >> $RCB_LOG
     else
 	printf "$(date) [ERR] Can't delete files in $RCB_META\n" >> $RCB_LOG
