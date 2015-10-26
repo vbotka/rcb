@@ -5,6 +5,12 @@ SRC="$BCK_USER@$BCK_HOST:$BCK_DST"
 DST="$RCB_ENCR"
 RCB_LOG_TEMP="$RCB_LOG_TEMP_RSYNC"
 
+# Optionaly dont rsync. Link the origin instead.
+# cd $RCB_BCK_ROOT
+# ln -s $RCB_ENC enc.restored
+# printf "$(date) [OK] *** Link from $RCB_BCK_ROOT/enc.restored to $RCB_ENC created\n" >> $RCB_LOG
+# exit 0
+
 printf "$(date) [OK] *** Rsync from $SRC/ to $DST started\n" >> $RCB_LOG
 # printf "$RSYNC $RSYNC_PARAM -e ssh $SRC/ $DST\n" >> $RCB_LOG
 if ($RSYNC $RSYNC_PARAM -e ssh $SRC/ $DST >$RCB_LOG_TEMP 2>&1); then
