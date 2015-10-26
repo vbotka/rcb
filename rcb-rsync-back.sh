@@ -12,7 +12,7 @@ RCB_LOG_TEMP="$RCB_LOG_TEMP_RSYNC"
 # exit 0
 
 printf "$(date) [OK] *** Rsync from $SRC/ to $DST started\n" >> $RCB_LOG
-# printf "$RSYNC $RSYNC_PARAM -e ssh $SRC/ $DST\n" >> $RCB_LOG
+
 if ($RSYNC $RSYNC_PARAM -e ssh $SRC/ $DST >$RCB_LOG_TEMP 2>&1); then
     printf "$(date) [OK] *** Rsync from $SRC/ to $DST finished\n" >> $RCB_LOG
 else

@@ -5,15 +5,15 @@ SRC="$RCB_ENC"
 DST="$BCK_USER@$BCK_HOST:$BCK_DST"
 RCB_LOG_TEMP="$RCB_LOG_TEMP_RSYNC"
 
+printf "$(date) [OK] *** Rsync from $SRC/ to $DST started\n" >> $RCB_LOG
+
 if [ $RSYNC_INCLUDE_FROM ]; then
-    RSYNC_PARAM_LOCAL="$RSYNC_INCLUDE_FROM_FILE $RSYNC_PARAM"
-else
-    RSYNC_PARAM_LOCAL="$RSYNC_PARAM"
+    RSYNC_PARAM="$RSYNC_INCLUDE_FROM_FILE $RSYNC_PARAM"
+    printf "$(date) [OK] $RSYNC_INCLUDE_FROM_FILE\n" >> $RCB_LOG
 fi
 
-printf "$(date) [OK] *** Rsync from $SRC/ to $DST started\n" >> $RCB_LOG
-# printf "$RSYNC $RSYNC_PARAM_LOCAL -e ssh $SRC/ $DST\n" >> $RCB_LOG
-if ($RSYNC $RSYNC_PARAM_LOCAL -e ssh $SRC/ $DST >$RCB_LOG_TEMP 2>&1); then
+
+if ($RSYNC $RSYNC_PARAM -e ssh $SRC/ $DST >$RCB_LOG_TEMP 2>&1); then
     printf "$(date) [OK] *** Rsync from $SRC/ to $DST finished\n" >> $RCB_LOG
 else
     printf "$(date) [ERR] Rsync from $SRC/ to $DST failed\n" >> $RCB_LOG
