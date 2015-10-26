@@ -78,17 +78,4 @@ for DIR in $(ls -1 $SRC); do
 done
 printf "$(date) [OK] *** Restore from $RCB_DEC/$RCB_HOST/snapshots/hourly.0 to $DST finnished\n" >> $RCB_LOG
 
-# /bin/umount $MOUNTPOINT
 exit
-
-# if /bin/mountpoint -q $MOUNTPOINT; then
-#     printf "*** [OK] $MOUNTPOINT already mounted\n" >> $RCB_LOG
-# else    
-#     if (/bin/mount -L planb-backup $MOUNTPOINT 2>&1) | (tee $RCB_LOG_TEMP >> $RCB_LOG); then
-#	printf "*** [OK] $MOUNTPOINT mounted\n" >> $RCB_LOG
-#    else
-#	printf "*** [ERR] $MOUNTPOINT mount failed\n" >> $RCB_LOG
-#	cat $RCB_LOG_TEMP | mail -s "$MOUNTPOINT mount failed" $RCB_EMAIL
-#	exit 1
-#    fi
-# fi
