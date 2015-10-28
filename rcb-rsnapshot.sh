@@ -32,7 +32,7 @@ for i in "$@"; do
 done
 
 printf "$(date) [OK] *** $INC backup started\n" >> $RCB_LOG
-if ($RSNAPSHOT $INC >$RCB_LOG_TEMP 2>&1); then
+if ($RSNAPSHOT $RSNAPSHOT_PARAM $INC >$RCB_LOG_TEMP 2>&1); then
     printf "$(date) [OK] *** $INC backup finished\n" >> $RCB_LOG
     rm $RCB_LOG_TEMP
 else

@@ -35,6 +35,8 @@ GZIP="/usr/local/bin/gzip"
 RSNAPSHOT="/usr/local/bin/rsnapshot"
 RSYNCRYPTO="/usr/local/bin/rsyncrypto"
 
+RSNAPSHOT_PARAM="-c /usr/local/etc/rsnapshot.conf"
+
 # Whenever encrypting or deleting a file, write the file's name to
 # logfile RSYNCRYPTO_EXPORT_CHANGES.  This allows passing logfile to
 # rsync(1) using the --include-from rsync option.
