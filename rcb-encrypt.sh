@@ -50,7 +50,7 @@ for REMOTE in $(ls -1 $SRC); do
 	exit 1
     fi
     # rsyncrypto does not store empty directories
-    if (cd $SRC; $FIND . -type d -empty | sed "s|^\./||" | sort > $RCB_META/$REMOTE/$RCB_EMPTYDIRS); then
+    if (cd $SRC/$REMOTE; $FIND . -type d -empty | sed "s|^\./||" | sort > $RCB_META/$REMOTE/$RCB_EMPTYDIRS); then
 	printf "$(date) [OK] empty directories stored in $RCB_META/$REMOTE/$RCB_EMPTYDIRS\n" >> $RCB_LOG
     else
 	printf "$(date) [ERR] find empty directories failed\n" >> $RCB_LOG
@@ -60,8 +60,17 @@ for REMOTE in $(ls -1 $SRC); do
 	exit 1
     fi
     # rsyncrypto does not store links
-    if (cd $SRC; $FIND . -type l | sed "s|^\./||" | sort > $RCB_META/$REMOTE/$RCB_LINKS); then
+    if (cd $SRC/$REMOTE; $FIND . -type l > $RCB_META/$REMOTE/$RCB_LINKS); then
 	printf "$(date) [OK] links stored in $RCB_META/$REMOTE/$RCB_LINKS\n" >> $RCB_LOG
+	if (cd $SRC/$REMOTE; $TAR cpf $RCB_META/$REMOTE/$RCB_LINKS_TAR --files-from $RCB_META/$REMOTE/$RCB_LINKS); then
+	    printf "$(date) [OK] links stored in $RCB_META/$REMOTE/$RCB_LINKS_TAR\n" >> $RCB_LOG
+	else
+	    printf "$(date) [ERR] tar links failed\n" >> $RCB_LOG
+	    cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
+	    cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE backup failed to tar links" $RCB_EMAIL
+	    rm $RCB_LOG_TEMP_ENC
+	    exit 1
+	fi
     else
 	printf "$(date) [ERR] find links failed\n" >> $RCB_LOG
 	cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
@@ -69,29 +78,10 @@ for REMOTE in $(ls -1 $SRC); do
 	rm $RCB_LOG_TEMP_ENC
 	exit 1
     fi
-    # rsyncrypto does not store fifo
-    if (cd $SRC; $FIND . -type p | sed "s|^\./||" | sort > $RCB_META/$REMOTE/$RCB_FIFO); then
-	printf "$(date) [OK] fifo stored in $RCB_META/$REMOTE/$RCB_FIFO\n" >> $RCB_LOG
-    else
-	printf "$(date) [ERR] find fifo failed\n" >> $RCB_LOG
-	cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
-	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE backup failed on finding fifo" $RCB_EMAIL
-	rm $RCB_LOG_TEMP_ENC
-	exit 1
-    fi
-    # rsyncrypto does not store sockets
-    if (cd $SRC; $FIND . -type s | sed "s|^\./||" | sort > $RCB_META/$REMOTE/$RCB_SOCKS); then
-	printf "$(date) [OK] sockets stored in $RCB_META/$REMOTE/$RCB_SOCKS\n" >> $RCB_LOG
-    else
-	printf "$(date) [ERR] find sockets failed\n" >> $RCB_LOG
-	cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
-	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE find sockets failed" $RCB_EMAIL
-	rm $RCB_LOG_TEMP_ENC
-	exit 1
-    fi
+    # no other metadata atm
+    touch $RCB_META/$REMOTE/$RCB_SPECIALS
 done
 
-# printf "$RSYNCRYPTO $RSYNCRYPTO_PARAM_E -r $SRC $DST $RCB_KEYS $RCB_CRT\n" >> $RCB_LOG
 if ($RSYNCRYPTO $RSYNCRYPTO_PARAM_E -r $SRC $DST $RCB_KEYS $RCB_CRT >$RCB_LOG_TEMP_ENC 2>&1); then
     printf "$(date) [OK] *** Encryption of $SRC finished\n" >> $RCB_LOG
 else

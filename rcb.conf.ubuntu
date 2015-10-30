@@ -32,6 +32,7 @@ RCB_NAMES="$RCB_CERT_ROOT/encrypted_names"
 
 MAIL="/usr/bin/mail"
 GZIP="/bin/gzip"
+TAR="/bin/tar"
 RSNAPSHOT="/usr/bin/rsnapshot"
 RSYNCRYPTO="/usr/bin/rsyncrypto"
 
@@ -70,8 +71,7 @@ MTREE_SPEC=".rcb-mtree.txt"
 FIND="/usr/bin/find"
 RCB_EMPTYDIRS=".rcb-empty-dirs.txt"
 RCB_LINKS=".rcb-links.txt"
-RCB_FIFO=".rcb-fifo.txt"
-RCB_SOCKS=".rcb-socks.txt"
+RCB_LINKS_TAR=".rcb-links.tar"
 RCB_SPECIALS=".rcb-specials.txt"
 
 RCB_LOG_ROOT="/var/log"

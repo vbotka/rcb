@@ -1,6 +1,7 @@
 #!/usr/local/bin/bash
 
 source /usr/local/etc/rcb.conf
+
 SRC="$RCB_DEC"
 DST="$RCB_RST_ROOT"
 RCB_LOG_TEMP="$RCB_LOG_TEMP_RESTORE"
@@ -30,15 +31,26 @@ function restore_from_meta {
     # create empty directories
     printf "$(date) Creating empty directories in $DST\n" >$RCB_LOG_TEMP
     for i in $(cat $SRC/$DIR/$RCB_EMPTYDIRS); do
-	if (mkdir -p $DST/$i >>$RCB_LOG_TEMP 2>&1); then
-	    printf "$(date) [OK] $DST/$i created\n" >> $RCB_LOG_TEMP
+	if (mkdir -p $DST/$DIR/$i >>$RCB_LOG_TEMP 2>&1); then
+	    printf "$(date) [OK] $DST/$DIR/$i created\n" >> $RCB_LOG_TEMP
 	else
-	    printf "$(date) [ERR] mkdir -p $DST/$i failed\n" >> $RCB_LOG
+	    printf "$(date) [ERR] mkdir -p $DST/$DIR/$i failed\n" >> $RCB_LOG
 	    cat $RCB_LOG_TEMP > $RCB_LOG
-	    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST mkdir -p $DST/$i failed\n" $RCB_EMAIL
+	    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST mkdir -p $DST/$DIR/$i failed\n" $RCB_EMAIL
 	    exit 1
 	fi
     done
+    # create links
+    printf "$(date) [OK] Creating links in $DST/$DIR\n" >$RCB_LOG_TEMP
+    if (cd  $DST/$DIR; $TAR xvf $SRC/$DIR/$RCB_LINKS_TAR >>$RCB_LOG_TEMP 2>&1); then
+	    printf "$(date) [OK] Links in $DST/$DIR created\n" >> $RCB_LOG_TEMP
+	else
+	    printf "$(date) [ERR] Links in $DST/$DIR failed\n" >> $RCB_LOG
+	    cat $RCB_LOG_TEMP > $RCB_LOG
+	    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST Links in $DST/$DIR failed" $RCB_EMAIL
+	    exit 1
+	fi
+
     # restore mode, ownership and time
     # printf "$MTREE -U -p $DST/$DIR -f $SRC/$DIR/$MTREE_SPEC\n" >> $RCB_LOG
     if ($MTREE -U -p $DST/$DIR -f $SRC/$DIR/$MTREE_SPEC >$RCB_LOG_TEMP 2>&1); then
@@ -46,24 +58,22 @@ function restore_from_meta {
     else
 	printf "$(date) [ERR] mtree from $SRC/$DIR/$MTREE_SPEC to $DST/$DIR failed\n" >> $RCB_LOG
 	cat $RCB_LOG_TEMP > $RCB_LOG
-	cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST mtree from $SRC/$DIR/$MTREE_SPEC to $DST/$DIR failed\n" $RCB_EMAIL
+	cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST mtree from $SRC/$DIR/$MTREE_SPEC to $DST/$DIR failed" $RCB_EMAIL
     fi
 }
 
 function restore_compare {
-printf "$(date) [OK] diff $SRC/$DIR/ and $DST/$DIR/ started\n" >> $RCB_LOG
-# printf "$RSYNC --dry-run --exclude-from=$META/$DIR/$RCB_LINKS -Hav $SRC/$DIR/ $DST/$DIR/\n" >$RCB_LOG_TEMP
-# TODO: fifo and sockets not excluded
-# TODO: links exclude-from doesnt work
-# TODO: check RCB_LOG_TEMP fpr pthers
-if ($RSYNC --dry-run --exclude-from=$RCB_META/$DIR/$RCB_LINKS -ahv $SRC/$DIR/ $DST/$DIR/ >$RCB_LOG_TEMP 2>&1); then
-    printf "$(date) [OK] diff $SRC/$DIR/ and $DST/$DIR/ finished\n" >> $RCB_LOG
-else
-    printf "$(date) [ERR] diff $SRC/$DIR/ and $DST/$DIR/ failed\n" >> $RCB_LOG
-    cat $RCB_LOG_TEMP > $RCB_LOG
-    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST diff $SRC/$DIR/ and $DST/$DIR/ failed" $RCB_EMAIL
-fi
+    printf "$(date) [OK] diff $SRC/$DIR/ and $DST/$DIR/ started\n" >> $RCB_LOG
+    if ($RSYNC --dry-run --exclude-from=$RCB_META/$DIR/$RCB_SPECIALS -ahv $SRC/$DIR/ $DST/$DIR/ >$RCB_LOG_TEMP 2>&1); then
+	printf "$(date) [OK] diff $SRC/$DIR/ and $DST/$DIR/ finished\n" >> $RCB_LOG
+    else
+	printf "$(date) [ERR] diff $SRC/$DIR/ and $DST/$DIR/ failed\n" >> $RCB_LOG
+	cat $RCB_LOG_TEMP > $RCB_LOG
+	cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST diff $SRC/$DIR/ and $DST/$DIR/ failed" $RCB_EMAIL
+    fi
 }
+# TODO: check RCB_LOG_TEMP
+
 
 printf "$(date) [OK] *** Restore from $SRC started\n" >> $RCB_LOG
 for DIR in $(ls -1 $SRC); do
@@ -73,9 +83,9 @@ for DIR in $(ls -1 $SRC); do
     restore_from_meta
     SRC="$RCB_BCK_ROOT/$RCB_BCK_PREFIX"
     restore_compare
-#   SRC=/
-#   restore_compare
 done
-printf "$(date) [OK] *** Restore from $RCB_DEC/$RCB_HOST/snapshots/hourly.0 to $DST finnished\n" >> $RCB_LOG
+
+SRC="$RCB_BCK_ROOT/$RCB_BCK_PREFIX"
+printf "$(date) [OK] *** $SRC restored in $DST\n" >> $RCB_LOG
 
 exit

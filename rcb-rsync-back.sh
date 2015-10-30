@@ -1,15 +1,42 @@
 #!/usr/local/bin/bash
 
 source /usr/local/etc/rcb.conf
+
+USAGE="$(basename "$0") [-h|--help] [-l|--link] -- rsync from backup
+where:
+    -h --help show this help text
+    -l --link links the origin directory instead of rsync"
+
+LINK=false
+for i in "$@"; do
+    case $i in
+	-h*|--help*)
+	    echo "$USAGE"
+	    exit
+	    ;;
+	-l=*|--link=*)
+	    LINK=true
+	    ;;
+	--default)
+	    LINK=false
+	    ;;
+	*)
+	    # unknown option
+	    ;;
+    esac
+done
+
 SRC="$BCK_USER@$BCK_HOST:$BCK_DST"
 DST="$RCB_ENCR"
 RCB_LOG_TEMP="$RCB_LOG_TEMP_RSYNC"
 
 # Optionaly dont rsync. Link the origin instead.
-# cd $RCB_BCK_ROOT
-# ln -s $RCB_ENC enc.restored
-# printf "$(date) [OK] *** Link from $RCB_BCK_ROOT/enc.restored to $RCB_ENC created\n" >> $RCB_LOG
-# exit 0
+if [ $LINK ]; then
+    cd $RCB_BCK_ROOT
+    ln -s $RCB_ENC enc.restored
+    printf "$(date) [OK] *** Link from $RCB_ENC to $RCB_BCK_ROOT/enc.restored created\n" >> $RCB_LOG
+    exit 0
+fi
 
 printf "$(date) [OK] *** Rsync from $SRC/ to $DST started\n" >> $RCB_LOG
 
