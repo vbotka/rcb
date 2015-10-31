@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/bin/bash
 
 source /usr/local/etc/rcb.conf
 
@@ -9,7 +9,7 @@ printf "$(date) [OK] *** Encryption of backup started\n" >> $RCB_LOG
 
 # directory to store the meta-data
 if [ -d "$RCB_META" ]; then
-    if ((find  $RCB_META -mindepth 1 -maxdepth 1 -exec rm -r {} \;) >$RCB_LOG_TEMP_ENC 2>&1); then
+    if ((find  $RCB_META -mindepth 1 -maxdepth 1 -exec rm -r {} \;) > $RCB_LOG_TEMP_ENC 2>&1); then
 	printf "$(date) [OK] files in $RCB_META deleted\n" >> $RCB_LOG
     else
 	printf "$(date) [ERR] Can't delete files in $RCB_META\n" >> $RCB_LOG
@@ -17,7 +17,7 @@ if [ -d "$RCB_META" ]; then
 	exit 1
     fi
 else
-    if ( mkdir -p $RCB_META >$RCB_LOG_TEMP_ENC 2>&1); then
+    if ( mkdir -p $RCB_META >> $RCB_LOG_TEMP_ENC 2>&1); then
 	printf "$(date) [OK] $RCB_META created\n" >> $RCB_LOG
     else
 	printf "$(date) [ERR] mkdir $RCB_META failed\n" >> $RCB_LOG
@@ -82,7 +82,7 @@ for REMOTE in $(ls -1 $SRC); do
     touch $RCB_META/$REMOTE/$RCB_SPECIALS
 done
 
-if ($RSYNCRYPTO $RSYNCRYPTO_PARAM_E -r $SRC $DST $RCB_KEYS $RCB_CRT >$RCB_LOG_TEMP_ENC 2>&1); then
+if ($RSYNCRYPTO $RSYNCRYPTO_PARAM_E -r $SRC $DST $RCB_KEYS $RCB_CRT > $RCB_LOG_TEMP_ENC 2>&1); then
     printf "$(date) [OK] *** Encryption of $SRC finished\n" >> $RCB_LOG
 else
     printf "$(date) [ERR] *** Encryption of $SRC finished with error\n" >> $RCB_LOG
