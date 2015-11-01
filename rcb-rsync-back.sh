@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/bin/bash
 
 source /usr/local/etc/rcb.conf
 
@@ -32,9 +32,11 @@ RCB_LOG_TEMP="$RCB_LOG_TEMP_RSYNC"
 
 # Optionaly dont rsync. Link the origin instead.
 if [ $LINK ]; then
-    cd $RCB_BCK_ROOT
-    ln -s $RCB_ENC enc.restored
-    printf "$(date) [OK] *** Link from $RCB_ENC to $RCB_BCK_ROOT/enc.restored created\n" >> $RCB_LOG
+    if [ -e $RCB_ENCR ]; then
+	rm -r $RCB_ENCR
+    fi
+    ln -s $RCB_ENC $RCB_ENCR
+    printf "$(date) [OK] *** Link from $RCB_ENC to $RCB_ENCR created\n" >> $RCB_LOG
     exit 0
 fi
 
