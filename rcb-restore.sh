@@ -31,17 +31,15 @@ fi
 function restore_from_meta {
     # create empty directories
     printf "$(date) Creating empty directories in $DST/$DIR\n" > $RCB_LOG_TEMP
-    for i in $(cat $SRC/$DIR/$RCB_EMPTYDIRS); do
-	if (mkdir -p "$DST/$DIR/$i" >> $RCB_LOG_TEMP 2>&1); then
-	    printf "$(date) $DST/$DIR/$i created\n" >> $RCB_LOG_TEMP
-	else
-	    printf "$(date) [ERR] mkdir -p $DST/$DIR/$i failed\n" >> $RCB_LOG
-	    cat $RCB_LOG_TEMP >> $RCB_LOG
-	    cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST mkdir -p $DST/$DIR/$i failed" $RCB_EMAIL
-	    exit 1
-	fi
-    done
-    printf "$(date) [OK] Empty directories created in $DST/$DIR\n" >> $RCB_LOG
+    if (cd  $DST/$DIR; $TAR xvf $SRC/$DIR/$RCB_EMPTYDIRS_TAR >> $RCB_LOG_TEMP 2>&1); then
+	printf "$(date) [OK] Empty dirs created in $DST/$DIR\n" >> $RCB_LOG
+    else
+	printf "$(date) [ERR] Failed to create empty dirs in $DST/$DIR\n" >> $RCB_LOG
+	cat $RCB_LOG_TEMP >> $RCB_LOG
+	cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST failed to create empty dirs in $DST/$DIR" $RCB_EMAIL
+	exit 1
+    fi
+
     # create links
     printf "$(date) Creating links in $DST/$DIR\n" > $RCB_LOG_TEMP
     if (cd  $DST/$DIR; $TAR xvf $SRC/$DIR/$RCB_LINKS_TAR >> $RCB_LOG_TEMP 2>&1); then
@@ -65,7 +63,7 @@ function restore_from_meta {
 
 function restore_compare {
     printf "$(date) diff $SRC/$DIR/ and $DST/$DIR/ started\n" > $RCB_LOG_TEMP
-    if ($RSYNC --dry-run --exclude-from=$RCB_META/$DIR/$RCB_SPECIALS -ahv $SRC/$DIR/ $DST/$DIR/ >> $RCB_LOG_TEMP 2>&1); then
+    if ($RSYNC --dry-run --checksum --exclude-from=$RCB_META/$DIR/$RCB_SPECIALS -ahv $SRC/$DIR/ $DST/$DIR/ >> $RCB_LOG_TEMP 2>&1); then
 	printf "$(date) [OK] diff $SRC/$DIR/ and $DST/$DIR/ finished\n" >> $RCB_LOG
     else
 	printf "$(date) [ERR] diff $SRC/$DIR/ and $DST/$DIR/ failed\n" >> $RCB_LOG
