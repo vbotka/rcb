@@ -42,8 +42,8 @@ RSNAPSHOT_PARAM="-c /usr/local/etc/rsnapshot.conf"
 # logfile RSYNCRYPTO_EXPORT_CHANGES.  This allows passing logfile to
 # rsync(1) using the --include-from rsync option.
 RSYNCRYPTO_EXPORT_CHANGES="$RCB_META/.rsyncrypto-export-changes"
-RSYNCRYPTO_PARAM_E="--name-encrypt=$RCB_NAMES --gzip=$GZIP --trim=$RSYNCRYPTO_TRIM_E --changed --export-changes=$RSYNCRYPTO_EXPORT_CHANGES"
-RSYNCRYPTO_PARAM_D="--name-encrypt=$RCB_NAMES --gzip=$GZIP --trim=$RSYNCRYPTO_TRIM_D"
+RSYNCRYPTO_PARAM_E="--name-encrypt=$RCB_NAMES --gzip=$GZIP --trim=$RSYNCRYPTO_TRIM_E --changed --delete --export-changes=$RSYNCRYPTO_EXPORT_CHANGES"
+RSYNCRYPTO_PARAM_D="--name-encrypt=$RCB_NAMES --gzip=$GZIP --trim=$RSYNCRYPTO_TRIM_D --changed --delete"
 
 RSYNC="/usr/bin/rsync"
 RSYNC_PARAM="--progress --delete -ahv"
