@@ -7,7 +7,7 @@ where:
     -h --help show this help text
     -l --link links the origin directory instead of rsync"
 
-LINK=false
+LINK="false"
 for i in "$@"; do
     case $i in
 	-h*|--help*)
@@ -15,10 +15,10 @@ for i in "$@"; do
 	    exit
 	    ;;
 	-l=*|--link=*)
-	    LINK=true
+	    LINK="true"
 	    ;;
 	--default)
-	    LINK=false
+	    LINK="false"
 	    ;;
 	*)
 	    # unknown option
@@ -31,7 +31,7 @@ DST="$RCB_ENCR"
 RCB_LOG_TEMP="$RCB_LOG_TEMP_RSYNC"
 
 # Optionaly dont rsync. Link the origin instead.
-if [ $LINK ]; then
+if [ $LINK == "true"]; then
     if [ -e $RCB_ENCR ]; then
 	rm -r $RCB_ENCR
     fi
