@@ -50,12 +50,21 @@ for REMOTE in $(ls -1 $SRC); do
 	exit 1
     fi
     # rsyncrypto does not store empty directories
-    if (cd $SRC/$REMOTE; $FIND . -type d -empty | sed "s|^\./||" | sort > $RCB_META/$REMOTE/$RCB_EMPTYDIRS); then
-	printf "$(date) [OK] empty directories stored in $RCB_META/$REMOTE/$RCB_EMPTYDIRS\n" >> $RCB_LOG
+    if (cd $SRC/$REMOTE; $FIND . -type d -empty > $RCB_META/$REMOTE/$RCB_EMPTYDIRS); then
+	printf "$(date) [OK] Empty dirs stored in $RCB_META/$REMOTE/$RCB_EMPTYDIRS\n" >> $RCB_LOG
+	if (cd $SRC/$REMOTE; $TAR cpf $RCB_META/$REMOTE/$RCB_EMPTYDIRS_TAR --files-from $RCB_META/$REMOTE/$RCB_EMPTYDIRS); then
+	    printf "$(date) [OK] Empty dirs stored in $RCB_META/$REMOTE/$RCB_EMPTYDIRS_TAR\n" >> $RCB_LOG
+	else
+	    printf "$(date) [ERR] tar empty dirs failed\n" >> $RCB_LOG
+	    cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
+	    cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE failed to tar empty dirs" $RCB_EMAIL
+	    rm $RCB_LOG_TEMP_ENC
+	    exit 1
+	fi
     else
-	printf "$(date) [ERR] find empty directories failed\n" >> $RCB_LOG
+	printf "$(date) [ERR] Failed to find empty dirs\n" >> $RCB_LOG
 	cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
-	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE backup failed on finding empty dirs" $RCB_EMAIL
+	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE failed to find empty dirs" $RCB_EMAIL
 	rm $RCB_LOG_TEMP_ENC
 	exit 1
     fi

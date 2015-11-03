@@ -70,6 +70,7 @@ MTREE_SPEC=".rcb-mtree.txt"
 
 FIND="/usr/bin/find"
 RCB_EMPTYDIRS=".rcb-empty-dirs.txt"
+RCB_EMPTYDIRS_TAR=".rcb-empty-dirs.tar"
 RCB_LINKS=".rcb-links.txt"
 RCB_LINKS_TAR=".rcb-links.tar"
 RCB_SPECIALS=".rcb-specials.txt"
