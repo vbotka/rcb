@@ -7,7 +7,7 @@ RCB_LOG_TEMP="$RCB_LOG_TEMP_RSYNC"
 
 printf "$(date) [OK] *** Rsync from $SRC/ to $DST started\n" >> $RCB_LOG
 
-if [ $RSYNC_INCLUDE_FROM ]; then
+if [ $RSYNC_INCLUDE_FROM == "true" ]; then
     RSYNC_PARAM="$RSYNC_INCLUDE_FROM_FILE $RSYNC_PARAM"
     printf "$(date) [OK] $RSYNC_INCLUDE_FROM_FILE\n" >> $RCB_LOG
 fi
