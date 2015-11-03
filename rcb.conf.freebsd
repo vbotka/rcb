@@ -61,7 +61,7 @@ RSYNC_PARAM="--progress --delete -ahv"
 # between two completely success- ful invocations of rsync, it is
 # possible for logfile not to be complete. Use this option at your
 # own risk!
-RSYNC_INCLUDE_FROM=true
+RSYNC_INCLUDE_FROM="true"
 RSYNC_INCLUDE_FROM_FILE="--include-from=$RSYNCRYPTO_EXPORT_CHANGES"
 
 MTREE="/usr/sbin/mtree"
