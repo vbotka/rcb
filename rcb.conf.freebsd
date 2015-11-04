@@ -10,6 +10,7 @@ RCB_BCK_PREFIX="$RCB_HOST/snapshots/hourly.0"
 RCB_ENC="$RCB_BCK_ROOT/enc"
 RCB_ENCR="$RCB_BCK_ROOT/enc.restored"
 RCB_DEC="$RCB_BCK_ROOT/dec"
+RCB_DEC_MODE="0700"
 RCB_META="$RCB_BCK_ROOT/meta"
 
 RCB_RST_ROOT="/restore"
