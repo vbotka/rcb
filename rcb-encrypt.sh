@@ -87,8 +87,17 @@ for REMOTE in $(ls -1 $SRC); do
 	rm $RCB_LOG_TEMP_ENC
 	exit 1
     fi
-    # no other metadata atm
-    touch $RCB_META/$REMOTE/$RCB_SPECIALS
+    # Store special files. These will be excluded in the comparison of
+    # the restored files with the origin
+    if (cd $SRC/$REMOTE; $FIND . -type p | sed -e 's/^\.\///' > $RCB_META/$REMOTE/$RCB_SPECIALS); then
+	printf "$(date) [OK] fifo stored in $RCB_META/$REMOTE/$RCB_SPECIALS\n" >> $RCB_LOG
+    else
+	printf "$(date) [ERR] find fifo failed\n" >> $RCB_LOG
+	cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
+	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE backup failed on finding fifo" $RCB_EMAIL
+	rm $RCB_LOG_TEMP_ENC
+	exit 1
+    fi
 done
 
 if ($RSYNCRYPTO $RSYNCRYPTO_PARAM_E -r $SRC $DST $RCB_KEYS $RCB_CRT > $RCB_LOG_TEMP_ENC 2>&1); then
