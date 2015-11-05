@@ -27,6 +27,6 @@ rcb_delete
 RCB_PAR1="-f"
 RCB_PAR2="$RCB_NAMES"
 rcb_delete
-printf "$(date) [OK] *** Delete of encrypted data, meta, keys and names finished\n" >> $RCB_LOG
+printf "$(date) [OK] *** Encrypted data, meta, keys and names deleted\n" >> $RCB_LOG
 
 exit

@@ -5,16 +5,16 @@ source /usr/local/etc/rcb.conf
 USAGE="$(basename "$0") [-h|--help] [-d|--delete] -- decrypt backup
 where:
     -h --help show this help text
-    -d --delete previous data, if exists"
+    -d --delete already decrypted data, if exists"
 
 DST_DEL="false"
 for i in "$@"; do
     case $i in
-	-h*|--help*)
+	-h|--help)
 	    echo "$USAGE"
 	    exit
 	    ;;
-	-d=*|--delete=*)
+	-d|--delete)
 	    DST_DEL="true"
 	    ;;
 	--default)
@@ -31,7 +31,7 @@ SRC="$RCB_ENCR"
 DST="$RCB_DEC"
 RCB_LOG_TEMP="$RCB_LOG_TEMP_DEC"
 
-printf "$(date) [OK] *** Dencryption from $SRC to $DST started\n" >> $RCB_LOG
+printf "$(date) [OK] *** Decryption from $SRC to $DST started\n" >> $RCB_LOG
 
 if [ -d "$DST" ]; then
     if [ $DST_DEL == "true" ]; then

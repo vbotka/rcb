@@ -39,7 +39,6 @@ function restore_from_meta {
 	cat $RCB_LOG_TEMP | $MAIL -s "[ERR] $RCB_HOST failed to create empty dirs in $DST/$DIR" $RCB_EMAIL
 	exit 1
     fi
-
     # create links
     printf "$(date) Creating links in $DST/$DIR\n" > $RCB_LOG_TEMP
     if (cd  $DST/$DIR; $TAR xvf $SRC/$DIR/$RCB_LINKS_TAR >> $RCB_LOG_TEMP 2>&1); then

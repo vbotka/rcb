@@ -70,31 +70,31 @@ for REMOTE in $(ls -1 $SRC); do
     fi
     # rsyncrypto does not store links
     if (cd $SRC/$REMOTE; $FIND . -type l > $RCB_META/$REMOTE/$RCB_LINKS); then
-	printf "$(date) [OK] links stored in $RCB_META/$REMOTE/$RCB_LINKS\n" >> $RCB_LOG
+	printf "$(date) [OK] Links stored in $RCB_META/$REMOTE/$RCB_LINKS\n" >> $RCB_LOG
 	if (cd $SRC/$REMOTE; $TAR cpf $RCB_META/$REMOTE/$RCB_LINKS_TAR --files-from $RCB_META/$REMOTE/$RCB_LINKS); then
-	    printf "$(date) [OK] links stored in $RCB_META/$REMOTE/$RCB_LINKS_TAR\n" >> $RCB_LOG
+	    printf "$(date) [OK] Links stored in $RCB_META/$REMOTE/$RCB_LINKS_TAR\n" >> $RCB_LOG
 	else
-	    printf "$(date) [ERR] tar links failed\n" >> $RCB_LOG
+	    printf "$(date) [ERR] Failed to tar links\n" >> $RCB_LOG
 	    cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
-	    cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE backup failed to tar links" $RCB_EMAIL
+	    cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE Failed to tar links" $RCB_EMAIL
 	    rm $RCB_LOG_TEMP_ENC
 	    exit 1
 	fi
     else
-	printf "$(date) [ERR] find links failed\n" >> $RCB_LOG
+	printf "$(date) [ERR] Failed to find links\n" >> $RCB_LOG
 	cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
-	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE backup failed on finding links" $RCB_EMAIL
+	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE Failed to find links" $RCB_EMAIL
 	rm $RCB_LOG_TEMP_ENC
 	exit 1
     fi
     # Store special files. These will be excluded in the comparison of
     # the restored files with the origin
     if (cd $SRC/$REMOTE; $FIND . -type p | sed -e 's/^\.\///' > $RCB_META/$REMOTE/$RCB_SPECIALS); then
-	printf "$(date) [OK] fifo stored in $RCB_META/$REMOTE/$RCB_SPECIALS\n" >> $RCB_LOG
+	printf "$(date) [OK] Fifo stored in $RCB_META/$REMOTE/$RCB_SPECIALS\n" >> $RCB_LOG
     else
-	printf "$(date) [ERR] find fifo failed\n" >> $RCB_LOG
+	printf "$(date) [ERR] Failed to find fifo\n" >> $RCB_LOG
 	cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
-	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE backup failed on finding fifo" $RCB_EMAIL
+	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE Failed to find fifo" $RCB_EMAIL
 	rm $RCB_LOG_TEMP_ENC
 	exit 1
     fi
@@ -103,9 +103,9 @@ done
 if ($RSYNCRYPTO $RSYNCRYPTO_PARAM_E -r $SRC $DST $RCB_KEYS $RCB_CRT > $RCB_LOG_TEMP_ENC 2>&1); then
     printf "$(date) [OK] *** Encryption of $SRC finished\n" >> $RCB_LOG
 else
-    printf "$(date) [ERR] *** Encryption of $SRC finished with error\n" >> $RCB_LOG
+    printf "$(date) [ERR] *** Encryption of $SRC failed\n" >> $RCB_LOG
     cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
-    cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST Encryption of $SRC finished with error" $RCB_EMAIL
+    cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST Encryption of $SRC failed" $RCB_EMAIL
     rm $RCB_LOG_TEMP_ENC
     exit 1
 fi

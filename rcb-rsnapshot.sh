@@ -15,7 +15,7 @@ fi
 
 for i in "$@"; do
     case $i in
-	-h*|--help*)
+	-h|--help)
 	    echo "$USAGE"
 	    exit
 	    ;;
