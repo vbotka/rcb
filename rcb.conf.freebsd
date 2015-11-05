@@ -44,6 +44,17 @@ RSNAPSHOT_PARAM="-c /usr/local/etc/rsnapshot.conf"
 # rsync(1) using the --include-from rsync option.
 RSYNCRYPTO_EXPORT_CHANGES="$RCB_META/.rsyncrypto-export-changes"
 RSYNCRYPTO_PARAM_E="--name-encrypt=$RCB_NAMES --gzip=$GZIP --trim=$RSYNCRYPTO_TRIM_E --changed --delete --export-changes=$RSYNCRYPTO_EXPORT_CHANGES"
+
+# --delete doesn't work on decryption. Files present in the destination
+# (from the previous decryption) and not present in the source anymore
+# are not deleted. As a result these files will propagate to restored
+# files, but won't be detected by the final comparison of restored and
+# origin files, because only missing, or changed files in the restore
+# directory are detected.
+# rcb-decrypt.sh --delete will delete the destination before
+# decryption. It's time consuming to perform complete decryption of
+# all files. Therefore the default is to keep the destination and
+# decrypt --changed files only.
 RSYNCRYPTO_PARAM_D="--name-encrypt=$RCB_NAMES --gzip=$GZIP --trim=$RSYNCRYPTO_TRIM_D --changed --delete"
 
 RSYNC="/usr/local/bin/rsync"
