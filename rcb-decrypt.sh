@@ -35,7 +35,7 @@ printf "$(date) [OK] *** Decryption from $SRC to $DST started\n" >> $RCB_LOG
 
 if [ -d "$DST" ]; then
     if [ $DST_DEL == "true" ]; then
-	if ((find $DST -mindepth 1 -maxdepth 1 -exec rm -r {} \;) > $RCB_LOG_TEMP_ENC 2>&1); then
+	if ((find $DST -mindepth 1 -maxdepth 1 -exec rm -r {} \;) > $RCB_LOG_TEMP 2>&1); then
 	    printf "$(date) [OK] Files in $DST deleted\n" >> $RCB_LOG
 	else
 	    printf "$(date) [ERR] Cant delete files in $DST\n" >> $RCB_LOG
