@@ -1,28 +1,35 @@
 #!/usr/local/bin/bash
 
 # It is possible to decrypt the files with the private key only. To
-# proceed the following 3 parameters are needed
+# proceed the following 4 parameters are needed
 # 1. Private key
 RCB_KEY="/path/backup.key"
 # 2. Path to encrypted files
 SRC="/path_encrypted_files"
 # 3. Path to decrypted files
 DST="/path_to_decrypted_files"
-
+# 4. Path to restored keys
+RCB_KEYS_DIR="/path/rcb-keys"
+#
+# Key to restore the filemap (key will be restored with the help of
+# the private key)
+DST_FILEMAP_KEYS="$DST/filemap-keys"
+# Encrypted filemap
+SRC_FILEMAP="$SRC/filemap"
+# Dencrypted filemap
+RCB_NAMES="$DST/filemap"
+#
+# parameters from rcb.conf
 RCB_DEC_MODE="0700"
 RCB_LOG_ROOT="/var/log"
 RCB_LOG="$RCB_LOG_ROOT/rcb-central.log"
 RCB_LOG_TEMP_ROOT="/tmp"
 RCB_LOG_TEMP_DEC="$RCB_LOG_TEMP_ROOT/rcb-temp-decrypt.log"
 RCB_LOG_TEMP="$RCB_LOG_TEMP_DEC"
-SRC_FILEMAP="$SRC/filemap"
-RCB_NAMES="$DST/filemap"
-DST_FILEMAP_KEYS="$DST/filemap-keys"
 GZIP="/usr/local/bin/gzip"
 RSYNCRYPTO="/usr/local/bin/rsyncrypto"
 RSYNCRYPTO_TRIM_D="3"
 RSYNCRYPTO_PARAM_D="--name-encrypt=$RCB_NAMES --gzip=$GZIP --trim=$RSYNCRYPTO_TRIM_D --changed --delete -vv"
-RCB_KEYS_DIR="/export/rcb-keys"
 
 printf "$(date) [OK] *** Decryption from $SRC to $DST started\n" >> $RCB_LOG
 
