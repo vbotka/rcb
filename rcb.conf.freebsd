@@ -29,7 +29,7 @@ RSYNCRYPTO_TRIM_D="2"
 RCB_CRT_ROOT="/root/cert/backup"
 RCB_KEYS="$RCB_CRT_ROOT/keys"
 RCB_CRT="$RCB_CRT_ROOT/backup.crt"
-RCB_NAMES="$RCB_CERT_ROOT/encrypted_names"
+RCB_NAMES="$RCB_CRT_ROOT/encrypted_names"
 
 MAIL="/usr/bin/mail"
 GZIP="/usr/local/bin/gzip"
