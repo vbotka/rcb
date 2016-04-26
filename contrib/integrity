@@ -1,0 +1,66 @@
+#!/usr/local/bin/bash
+#set -x
+
+BACKUP="/backup"
+#BACKUP="/export/backup/snapshots/daily.0"
+MD5DIR="/md5"
+#MD5DIR="/export/md5"
+# Ubuntu hashdeep NOT TESTED
+#MD5DEEP="/usr/bin/hashdeep"
+# FreeBSD md5deep TESTED OK
+MD5DEEP="/usr/local/bin/md5deep"
+MD5DEEPCONF="-w -o f -l -r"
+
+USAGE="$(basename "$0") [-h|--help] [-l|--list] [-a|--all|<client>] -- check integrity
+where:
+    -h --help             show this help text
+    -l --list             list clients
+    -a --all              check integrity of all clients
+    <client>              check integrity of client"
+
+EXPECTED_ARGS=1
+if [ $# -lt $EXPECTED_ARGS ]; then
+    echo "$USAGE"
+    exit
+fi
+
+# Command to create the hash-files
+# cd $BACKUP; $MD5DEEP -e -o f -l -r $CLIENT/ > $MD5DIR/$CLIENT.md5deep
+# Files not inclueded in hash-files will be printed
+function check-integrity {
+#	 echo "*** intergrity of $CLIENT ---------------------------------------"
+	 if (cd $BACKUP; $MD5DEEP $MD5DEEPCONF -x $MD5DIR/$CLIENT.md5deep $CLIENT); then
+	     printf "[OK] integrity: $CLIENT md5 correct\n"
+	 else
+	     printf "[ERR] integrity: $CLIENT md5 error $?\n"
+# TODO: email error
+	 fi
+}
+
+CLIENTS=$(ls -1 $MD5DIR | cut -d'.' -f1)
+for i in "$@"; do
+    case $i in
+	-h|--help)
+	    echo "$USAGE"
+	    exit
+	    ;;
+	-l|--list)
+	    printf "$CLIENTS\n"
+	    ;;
+	-a|--all)
+	    for CLIENT in $CLIENTS; do
+		check-integrity
+	    done
+	    ;;
+	*)
+	    if [[ $CLIENTS =~ $i ]] ; then
+		CLIENT=$i
+		check-integrity
+	    else
+		printf "[ERR] integrity: Unknown client $i\n"
+	    fi
+	    ;;
+    esac
+done
+
+exit
