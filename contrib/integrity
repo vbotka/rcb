@@ -2,7 +2,7 @@
 #set -x
 
 BACKUP="/backup"
-#BACKUP="/export/backup/snapshots/daily.0"
+#BACKUP="/export/backup/snapshots/hourly.0"
 MD5DIR="/md5"
 #MD5DIR="/export/md5"
 # Ubuntu hashdeep NOT TESTED
@@ -11,9 +11,10 @@ MD5DIR="/md5"
 MD5DEEP="/usr/local/bin/md5deep"
 MD5DEEPCONF="-w -o f -l -r"
 
-USAGE="$(basename "$0") [-h|--help] [-l|--list] [-a|--all|<client>] -- check integrity
+USAGE="$(basename "$0") [-h|--help] [-l|--list] [-s|--silent] [-a|--all|<client>] -- check integrity
 where:
     -h --help             show this help text
+    -s --silent           report only errors
     -l --list             list clients
     -a --all              check integrity of all clients
     <client>              check integrity of client"
@@ -30,13 +31,13 @@ fi
 function check-integrity {
 #	 echo "*** intergrity of $CLIENT ---------------------------------------"
 	 if (cd $BACKUP; $MD5DEEP $MD5DEEPCONF -x $MD5DIR/$CLIENT.md5deep $CLIENT); then
-	     printf "[OK] integrity: $CLIENT md5 correct\n"
+	     (($VERBOSE)) && printf "[OK] integrity: $CLIENT md5 correct\n"
 	 else
 	     printf "[ERR] integrity: $CLIENT md5 error $?\n"
-# TODO: email error
 	 fi
 }
 
+VERBOSE=1
 CLIENTS=$(ls -1 $MD5DIR | cut -d'.' -f1)
 for i in "$@"; do
     case $i in
@@ -46,6 +47,9 @@ for i in "$@"; do
 	    ;;
 	-l|--list)
 	    printf "$CLIENTS\n"
+	    ;;
+	-s|--silent)
+	    VERBOSE=0
 	    ;;
 	-a|--all)
 	    for CLIENT in $CLIENTS; do
