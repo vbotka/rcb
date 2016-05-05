@@ -2,7 +2,7 @@
 #set -x
 
 BACKUP="/backup"
-HASHDIR="/export/hashdeep"
+HASHDIR="/hashdeep"
 # Ubuntu hashdeep TESTED OK
 #HASHDEEP="/usr/bin/hashdeep"
 # FreeBSD md5deep TESTED OK
@@ -15,7 +15,8 @@ HASHDEEPCONF="-w -o f -l -r -x"
 USAGE="$(basename "$0") [-h|--help] [-l|--list] [-s|--silent] [-a|--all|<client>] -- check integrity
 where:
     -h --help             show this help text
-    -s --silent           report errors only
+    -s --silent           report only errors
+    -c --commands         list commands to create the hash files
     -l --list             list clients
     -a --all              check integrity of all clients
     <client>              check integrity of client"
@@ -26,11 +27,9 @@ if [ $# -lt $EXPECTED_ARGS ]; then
     exit
 fi
 
-# Command to create the hash-files (both FreeBSD and Ubuntu tested OK)
-# cd $BACKUP; $HASHDEEP -e -o f -l -r $CLIENT > $HASHDIR/$CLIENT.hashdeep
 function check-integrity {
 # Files not included in hash-files will be printed (VERBOSE only)
-# Changed files  in the has-files will be printed (hash error)
+# Changed files in the hash-files will be printed (hash error)
 	 (($VERBOSE)) && printf "*** intergrity of $CLIENT ---------------------------------------\n"
 	 if LOG=$(cd $BACKUP; $HASHDEEP $HASHDEEPCONF $HASHDIR/$CLIENT.hashdeep $CLIENT 2>&1); then
 	     (($VERBOSE)) && printf "[OK] integrity: $CLIENT hash correct\n"
@@ -51,6 +50,14 @@ for i in "$@"; do
 	    ;;
 	-l|--list)
 	    printf "$CLIENTS\n"
+	    exit
+	    ;;
+	-c|--commands)
+	    printf "Commands to create the hash-files:\n"
+	    for i in $CLIENTS; do
+		printf "cd $BACKUP; $HASHDEEP -e -o f -l -r $i > $HASHDIR/$i.hashdeep \n"
+	    done
+	    exit
 	    ;;
 	-s|--silent)
 	    VERBOSE=0
