@@ -39,7 +39,7 @@ for REMOTE in $(ls -1 $SRC); do
 	rm $RCB_LOG_TEMP_ENC
 	exit 1
     fi
-    # rsyncrypto doesnt store ownership and mode of the files
+# rsyncrypto doesnt store ownership and mode of the files
     if ($MTREE $MTREE_PARAM -p $SRC/$REMOTE > $RCB_META/$REMOTE/$MTREE_SPEC 2>$RCB_LOG_TEMP_ENC); then
 	printf "$(date) [OK] mtree specification stored in $RCB_META/$REMOTE/$MTREE_SPEC\n" >> $RCB_LOG
     else
@@ -49,7 +49,7 @@ for REMOTE in $(ls -1 $SRC); do
 	rm $RCB_LOG_TEMP_ENC
 	exit 1
     fi
-    # rsyncrypto does not store empty directories
+# rsyncrypto does not store empty directories
     if (cd $SRC/$REMOTE; $FIND . -type d -empty > $RCB_META/$REMOTE/$RCB_EMPTYDIRS); then
 	printf "$(date) [OK] Empty dirs stored in $RCB_META/$REMOTE/$RCB_EMPTYDIRS\n" >> $RCB_LOG
 	if (cd $SRC/$REMOTE; $TAR cpf $RCB_META/$REMOTE/$RCB_EMPTYDIRS_TAR --files-from $RCB_META/$REMOTE/$RCB_EMPTYDIRS); then
@@ -68,7 +68,7 @@ for REMOTE in $(ls -1 $SRC); do
 	rm $RCB_LOG_TEMP_ENC
 	exit 1
     fi
-    # rsyncrypto does not store links
+# rsyncrypto does not store links
     if (cd $SRC/$REMOTE; $FIND . -type l > $RCB_META/$REMOTE/$RCB_LINKS); then
 	printf "$(date) [OK] Links stored in $RCB_META/$REMOTE/$RCB_LINKS\n" >> $RCB_LOG
 	if (cd $SRC/$REMOTE; $TAR cpf $RCB_META/$REMOTE/$RCB_LINKS_TAR --files-from $RCB_META/$REMOTE/$RCB_LINKS); then
@@ -87,14 +87,25 @@ for REMOTE in $(ls -1 $SRC); do
 	rm $RCB_LOG_TEMP_ENC
 	exit 1
     fi
-    # Store special files. These will be excluded in the comparison of
-    # the restored files with the origin
+# Store special files. These will be excluded in the comparison of
+# the restored files with the origin
+# PIPES (-type p)
     if (cd $SRC/$REMOTE; $FIND . -type p | sed -e 's/^\.\///' > $RCB_META/$REMOTE/$RCB_SPECIALS); then
 	printf "$(date) [OK] Fifo stored in $RCB_META/$REMOTE/$RCB_SPECIALS\n" >> $RCB_LOG
     else
 	printf "$(date) [ERR] Failed to find fifo\n" >> $RCB_LOG
 	cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
 	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE Failed to find fifo" $RCB_EMAIL
+	rm $RCB_LOG_TEMP_ENC
+	exit 1
+    fi
+# SOCKETS (-type s)
+    if (cd $SRC/$REMOTE; $FIND . -type s | sed -e 's/^\.\///' >> $RCB_META/$REMOTE/$RCB_SPECIALS); then
+	printf "$(date) [OK] Sockets stored in $RCB_META/$REMOTE/$RCB_SPECIALS\n" >> $RCB_LOG
+    else
+	printf "$(date) [ERR] Failed to find sockets\n" >> $RCB_LOG
+	cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
+	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE Failed to find sockets" $RCB_EMAIL
 	rm $RCB_LOG_TEMP_ENC
 	exit 1
     fi
