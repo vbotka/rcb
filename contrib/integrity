@@ -11,8 +11,10 @@ HASHDEEP="/usr/local/bin/md5deep"
 # HASHDEEPCONF="-w -o f -l -r -x -k"
 # FreeBSD md5deep configuration
 HASHDEEPCONF="-w -o f -l -r -x"
+[ -f ~/.integrity ] && . ~/.integrity
 
-USAGE="$(basename "$0") [-h|--help] [-l|--list] [-s|--silent] [-a|--all|<client>] -- check integrity
+USAGE="$(basename "$0") [-h|--help] [-s|--silent] [-c|--commands] [-l|--list]
+          [-a|--all|<client>] -- check integrity
 where:
     -h --help             show this help text
     -s --silent           report only errors
