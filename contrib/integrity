@@ -1,7 +1,7 @@
 #!/usr/local/bin/bash
 #set -x
 
-BACKUP="/backup"
+BACKUP="/integrity"
 HASHDIR="/hashdeep"
 # Ubuntu hashdeep TESTED OK
 #HASHDEEP="/usr/bin/hashdeep"
@@ -33,7 +33,7 @@ function check-integrity {
 # Files not included in hash-files will be printed (VERBOSE only)
 # Changed files in the hash-files will be printed (hash error)
 	 (($VERBOSE)) && printf "*** intergrity of $CLIENT ---------------------------------------\n"
-	 if LOG=$(cd $BACKUP; $HASHDEEP $HASHDEEPCONF $HASHDIR/$CLIENT.hashdeep $CLIENT 2>&1); then
+	 if LOG=$(cd $BACKUP; $HASHDEEP $HASHDEEPCONF $HASHDIR/$CLIENT.hashdeep $CLIENT/ 2>&1); then
 	     (($VERBOSE)) && printf "[OK] integrity: $CLIENT hash correct\n"
 	     (($VERBOSE)) && printf "$LOG\n"
 	 else
@@ -57,7 +57,7 @@ for i in "$@"; do
 	-c|--commands)
 	    printf "Commands to create the hash-files:\n"
 	    for i in $CLIENTS; do
-		printf "cd $BACKUP; $HASHDEEP -e -o f -l -r $i > $HASHDIR/$i.hashdeep \n"
+		printf "cd $BACKUP; $HASHDEEP -e -o f -l -r $i/ > $HASHDIR/$i.hashdeep \n"
 	    done
 	    exit
 	    ;;
