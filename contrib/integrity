@@ -32,7 +32,7 @@ fi
 function check-integrity {
 # Files not included in hash-files will be printed (VERBOSE only)
 # Changed files in the hash-files will be printed (hash error)
-	 (($VERBOSE)) && printf "*** intergrity of $CLIENT ---------------------------------------\n"
+	 (($VERBOSE)) && printf "[OK] intergrity: $CLIENT check started\n"
 	 if LOG=$(cd $BACKUP; $HASHDEEP $HASHDEEPCONF $HASHDIR/$CLIENT.hashdeep $CLIENT/ 2>&1); then
 	     (($VERBOSE)) && printf "[OK] integrity: $CLIENT hash correct\n"
 	     (($VERBOSE)) && printf "$LOG\n"
