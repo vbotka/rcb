@@ -35,10 +35,10 @@ function check-integrity {
 	 (($VERBOSE)) && printf "[OK] intergrity: $CLIENT check started\n"
 	 if LOG=$(cd $BACKUP; $HASHDEEP $HASHDEEPCONF $HASHDIR/$CLIENT.hashdeep $CLIENT/ 2>&1); then
 	     (($VERBOSE)) && printf "[OK] integrity: $CLIENT hash correct\n"
-	     (($VERBOSE)) && printf "$LOG\n"
+	     (($VERBOSE)) && [[ ! -z $LOG ]] && printf "[OK] hashdeep: $LOG\n"
 	 else
 	     printf "[ERR] integrity: $CLIENT hash error $?\n"
-	     printf "$LOG\n"
+	     printf "[ERR] hashdeep: $LOG\n"
 	 fi
 }
 
