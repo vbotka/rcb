@@ -67,8 +67,8 @@ for i in "$@"; do
 	-c|--commands)
 	    printf "Commands to create the hash-files:\n"
 	    for i in $CLIENTS; do
-		printf "cd $BACKUP; $HASHDEEP -e -o f -l -r $i/ > $HASHDIR/$i.hashdeep \n"
-		printf "cd $BACKUP; $MTREE -c -k uname,gname,mode,time -p $i/ > $HASHDIR/$i.mtree \n"
+		printf "cd $BACKUP; $HASHDEEP -e -o f -l -r $i/ > $HASHDIR/$i.hashdeep\n"
+		printf "cd $BACKUP; $MTREE -c -p $i/ > $HASHDIR/$i.mtree\n"
 		printf "\n"
 	    done
 	    exit
