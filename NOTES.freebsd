@@ -13,10 +13,14 @@ root@releng1.nyi.freebsd.org:/usr/obj/usr/src/sys/GENERIC amd64
 On srv
 ------
 
-  * install: bash, git, rsnapshot, rsyncrypto
+  * install: shells/bash, devel/git, sysutils/rsnapshot,
+    sysutils/rsyncrypto, security/md5deep
 
-  * install gzip from /usr/ports/archivers/gzip make sure, that
-    RSYNCABLE option is checked
+  * install gzip from /usr/ports/archivers/gzip and make sure, that
+    RSYNCABLE option is checked. As of 2016/6 (probably sooner) there
+    is no RSYNCABLE option in the configuration. RSYNCABLE is default
+    > /usr/local/bin/gzip -h | grep rsyncable
+          --rsyncable   make rsync-friendly archive
 
   * Get RCB
 # git clone https://github.com/vbotka/rcb
@@ -81,14 +85,18 @@ total 8
 
   * Check the log
 # tail -f /var/log/rcb-central.log
-Sun Oct  4 19:46:27 UTC 2015 [OK] *** Encryption of backup started
-Sun Oct  4 19:46:27 UTC 2015 [OK] /backup/meta created
-Sun Oct  4 19:46:27 UTC 2015 [OK] /backup/meta/localhost created
-Sun Oct  4 19:46:27 UTC 2015 [OK] mtree specification stored in /backup/meta/localhost/.rcb-mtree.txt
-Sun Oct  4 19:46:27 UTC 2015 [OK] empty directories stored in /backup/meta/localhost/.rcb-empty-dirs.txt
-Sun Oct  4 19:46:27 UTC 2015 [OK] links stored in /backup/meta/localhost/.rcb-links.txt
-Sun Oct  4 19:46:27 UTC 2015 [OK] fifo and sockets stored in /backup/meta/localhost/.rcb-specials.txt
-Sun Oct  4 19:46:35 UTC 2015 [OK] *** Encryption of /backup/srv.example.com/snapshots/hourly.0 finished
+Mon Jun  6 10:30:01 CEST 2016 [OK] *** Encryption of backup started
+Mon Jun  6 10:30:01 CEST 2016 [OK] files in /backup/meta deleted
+Mon Jun  6 10:30:01 CEST 2016 [OK] /backup/meta/localhost created
+Mon Jun  6 10:30:01 CEST 2016 [OK] mtree specification stored in /backup/meta/localhost/.rcb-mtree.txt
+Mon Jun  6 10:30:01 CEST 2016 [OK] Empty dirs stored in /backup/meta/localhost/.rcb-empty-dirs.txt
+Mon Jun  6 10:30:01 CEST 2016 [OK] Empty dirs stored in /backup/meta/localhost/.rcb-empty-dirs.tar
+Mon Jun  6 10:30:01 CEST 2016 [OK] Links stored in /backup/meta/localhost/.rcb-links.txt
+Mon Jun  6 10:30:01 CEST 2016 [OK] Links stored in /backup/meta/localhost/.rcb-links.tar
+Mon Jun  6 10:30:01 CEST 2016 [OK] Fifo stored in /backup/meta/localhost/.rcb-specials.txt
+Mon Jun  6 10:30:01 CEST 2016 [OK] Sockets stored in /backup/meta/localhost/.rcb-specials.txt
+Mon Jun  6 10:30:01 CEST 2016 [OK] Digests stored in /backup/meta/localhost/.rcb-digests.txt
+Mon Jun  6 10:30:01 CEST 2016 [OK] *** Encryption of /backup/vm2/snapshots/hourly.0 finished
 
   * Check the encrypted files
 # ls -la /backup/enc/

@@ -40,7 +40,7 @@ for REMOTE in $(ls -1 $SRC); do
 	exit 1
     fi
 # rsyncrypto doesnt store ownership and mode of the files
-    if ($MTREE $MTREE_PARAM -p $SRC/$REMOTE > $RCB_META/$REMOTE/$MTREE_SPEC 2>$RCB_LOG_TEMP_ENC); then
+    if ($MTREE $MTREE_PARAM $SRC/$REMOTE > $RCB_META/$REMOTE/$MTREE_SPEC 2>$RCB_LOG_TEMP_ENC); then
 	printf "$(date) [OK] mtree specification stored in $RCB_META/$REMOTE/$MTREE_SPEC\n" >> $RCB_LOG
     else
 	printf "$(date) [ERR] mtree failed\n" >> $RCB_LOG
@@ -106,6 +106,16 @@ for REMOTE in $(ls -1 $SRC); do
 	printf "$(date) [ERR] Failed to find sockets\n" >> $RCB_LOG
 	cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
 	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE Failed to find sockets" $RCB_EMAIL
+	rm $RCB_LOG_TEMP_ENC
+	exit 1
+    fi
+# DIGESTS
+    if (cd $SRC; $HASHDEEP $HASHDEEP_PARAM_CREATE $REMOTE/ > $RCB_META/$REMOTE/$RCB_DIGESTS); then
+	printf "$(date) [OK] Digests stored in $RCB_META/$REMOTE/$RCB_DIGESTS\n" >> $RCB_LOG
+    else
+	printf "$(date) [ERR] Failed to create digets\n" >> $RCB_LOG
+	cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
+	cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST $REMOTE Failed to create digests" $RCB_EMAIL
 	rm $RCB_LOG_TEMP_ENC
 	exit 1
     fi

@@ -77,8 +77,12 @@ RSYNC_INCLUDE_FROM="true"
 RSYNC_INCLUDE_FROM_FILE="--include-from=$RSYNCRYPTO_EXPORT_CHANGES"
 
 MTREE="/usr/bin/fmtree"
-MTREE_PARAM="-c -k uname,gname,mode,time"
+MTREE_PARAM="-c -p"
 MTREE_SPEC=".rcb-mtree.txt"
+
+HASHDEEP="/usr/bin/hashdeep"
+HASHDEEP_PARAM_CREATE="-e -o f -l -r"
+HASHDEEP_PARAM="-w -o f -l -r -x -k"
 
 FIND="/usr/bin/find"
 RCB_EMPTYDIRS=".rcb-empty-dirs.txt"
@@ -86,6 +90,7 @@ RCB_EMPTYDIRS_TAR=".rcb-empty-dirs.tar"
 RCB_LINKS=".rcb-links.txt"
 RCB_LINKS_TAR=".rcb-links.tar"
 RCB_SPECIALS=".rcb-specials.txt"
+RCB_DIGESTS=".rcb-digests.txt"
 
 RCB_LOG_ROOT="/var/log"
 RCB_LOG="$RCB_LOG_ROOT/rcb-central.log"
