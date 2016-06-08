@@ -1,19 +1,22 @@
 #!/usr/local/bin/bash
 #set -x
 
-BACKUP="/integrity"
-HASHDIR="/hashdeep"
-
-# Ubuntu utilities and configuration
+# Ubuntu configuration
 # HASHDEEP="/usr/bin/hashdeep"
 # HASHDEEPCONF="-w -o f -l -r -x -k"
 # MTREE="/usr/bin/fmtree"
-#
-# FreeBSD utilities and configuration
+
+# FreeBSD configration
 HASHDEEP="/usr/local/bin/md5deep"
 HASHDEEPCONF="-w -o f -l -r -x"
 MTREE="/usr/sbin/mtree"
 
+# General configuration
+BACKUP="/integrity"
+HASHDIR="/hashdeep"
+# default set of keywords are flags, gid, link, mode, nlink, size, time, and uid
+MTREEKEYS="-k gid,link,mode,nlink,size,time,uid"
+[ -f /etc/integrity ] && . /etc/integrity
 [ -f ~/.integrity ] && . ~/.integrity
 
 USAGE="$(basename "$0") [-h|--help] [-s|--silent] [-c|--commands] [-r|--recreate] [-l|--list]
@@ -80,7 +83,7 @@ for i in "$@"; do
 		cd $BACKUP; $HASHDEEP -e -o f -l -r $i/ > $HASHDIR/$i.hashdeep
 		(($VERBOSE)) && printf "[OK] integrity: Recreating $HASHDIR/$i.hashdeep finished\n"
 		(($VERBOSE)) && printf "[OK] integrity: Recreating $HASHDIR/$i.mtree started\n"
-		cd $BACKUP; $MTREE -c -p $i/ > $HASHDIR/$i.mtree
+		cd $BACKUP; $MTREE $MTREEKEYS -c -p $i/ > $HASHDIR/$i.mtree
 		(($VERBOSE)) && printf "[OK] integrity: Recreating $HASHDIR/$i.mtree finished\n"
 	    done
 	    exit
