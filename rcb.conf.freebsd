@@ -81,8 +81,8 @@ MTREE_PARAM="-c -p"
 MTREE_SPEC=".rcb-mtree.txt"
 
 HASHDEEP="/usr/local/bin/md5deep"
-HASHDEEP_PARAM_CREATE="-e -o f -l -r"
-HASHDEEP_PARAM="-w -o f -l -r -x"
+HASHDEEP_PARAM_CREATE="-o f -l -r"
+HASHDEEP_PARAM="-o f -l -r -w -x"
 
 FIND="/usr/bin/find"
 RCB_EMPTYDIRS=".rcb-empty-dirs.txt"
