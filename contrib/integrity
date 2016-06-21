@@ -1,21 +1,44 @@
 #!/usr/local/bin/bash
 #set -x
 
+# TODO:
+# 1) EXCLUDE FILES
+# mtree -X exclude-list
+# The specified file contains fnmatch(3) patterns matching files to be
+# excluded from the specifi‐ cation, one to a line.  If the pattern
+# contains a ‘/’ character, it will be matched against entire pathnames
+# (relative to the starting directory); otherwise, it will be matched
+# against basenames only.  No comments are allowed in the exclude-list
+# file.
+# hashdeep -f <file>
+#Takes a list of files to be hashed from the specified file. Each line
+#is assumed to be a filename. This flag can only be used once per
+#invocation. If it's used a second time, the second instance will
+#clobber the first. Note that you can still use other flags, such as
+#the -m or -x modes, and submit additional FILES on the command line.
+
+# NOTES:
+# Files not included in hash-files will be listed (VERBOSE only)
+# Changed files in the hash-files will be listed (hash error)
+
+# CONFIGURATION:
 # Ubuntu configuration
 # HASHDEEP="/usr/bin/hashdeep"
 # HASHDEEPCONF="-w -o f -l -r -x -k"
 # MTREE="/usr/bin/fmtree"
-
 # FreeBSD configration
 HASHDEEP="/usr/local/bin/md5deep"
 HASHDEEPCONF="-w -o f -l -r -x"
 MTREE="/usr/sbin/mtree"
-
 # General configuration
-BACKUP="/integrity"
-HASHDIR="/hashdeep"
+LINKDIR="/integrity/link"
+METADIR="/integrity/meta"
+EXTHASH="hashdeep"
+EXTMTREE="mtree"
+EXTEXCLUDE="exclude"
 # default set of keywords are flags, gid, link, mode, nlink, size, time, and uid
 MTREEKEYS="-k gid,link,mode,nlink,size,time,uid"
+
 [ -f /etc/integrity ] && . /etc/integrity
 [ -f ~/.integrity ] && . ~/.integrity
 
@@ -37,17 +60,15 @@ if [ $# -lt $EXPECTED_ARGS ]; then
 fi
 
 function check-integrity {
-# Files not included in hash-files will be printed (VERBOSE only)
-# Changed files in the hash-files will be printed (hash error)
 	 (($VERBOSE)) && printf "[OK] integrity: *** $CLIENT check started\n"
-	 if LOG=$(cd $BACKUP; $HASHDEEP $HASHDEEPCONF $HASHDIR/$CLIENT.hashdeep $CLIENT/ 2>&1); then
+	 if LOG=$(cd $LINKDIR; $HASHDEEP $HASHDEEPCONF $METADIR/$CLIENT.$EXTHASH $CLIENT/ 2>&1); then
 	     (($VERBOSE)) && printf "[OK] integrity: $CLIENT hash correct\n"
 	     (($VERBOSE)) && [[ ! -z $LOG ]] && printf "[OK] integrity: hashdeep: $LOG\n"
 	 else
 	     printf "[ERR] integrity: $CLIENT hash error $?\n"
 	     printf "[ERR] integrity: hashdeep: $LOG\n"
 	 fi
-	 if LOG=$(cd $BACKUP; $MTREE -f $HASHDIR/$CLIENT.mtree -p $CLIENT/ 2>&1); then
+	 if LOG=$(cd $LINKDIR; $MTREE -f $METADIR/$CLIENT.$EXTMTREE -p $CLIENT/ 2>&1); then
 	     (($VERBOSE)) && printf "[OK] integrity: $CLIENT mtree correct\n"
 	     (($VERBOSE)) && [[ ! -z $LOG ]] && printf "[OK] integrity: mtree: $LOG\n"
 	 else
@@ -57,7 +78,7 @@ function check-integrity {
 }
 
 VERBOSE=1
-CLIENTS=$(cd $HASHDIR;ls -1 *.hashdeep | rev | cut -d'.' -f2- | rev)
+CLIENTS=$(cd $METADIR;ls -1 *.$EXTHASH | rev | cut -d'.' -f2- | rev)
 for i in "$@"; do
     case $i in
 	-h|--help)
@@ -71,20 +92,20 @@ for i in "$@"; do
 	-c|--commands)
 	    printf "Commands to create the hash adn mtree files:\n"
 	    for i in $CLIENTS; do
-		printf "cd $BACKUP; $HASHDEEP -e -o f -l -r $i/ > $HASHDIR/$i.hashdeep\n"
-		printf "cd $BACKUP; $MTREE $MTREEKEYS -c -p $i/ > $HASHDIR/$i.mtree\n"
+		printf "cd $LINKDIR; $HASHDEEP -e -o f -l -r $i/ > $METADIR/$i.$EXTHASH\n"
+		printf "cd $LINKDIR; $MTREE $MTREEKEYS -c -p $i/ > $METADIR/$i.$EXTMTREE\n"
 		printf "\n"
 	    done
 	    exit
 	    ;;
 	-r|--recreate)
 	    for i in $CLIENTS; do
-		(($VERBOSE)) && printf "[OK] integrity: Recreating $HASHDIR/$i.hashdeep started\n"
-		cd $BACKUP; $HASHDEEP -e -o f -l -r $i/ > $HASHDIR/$i.hashdeep
-		(($VERBOSE)) && printf "[OK] integrity: Recreating $HASHDIR/$i.hashdeep finished\n"
-		(($VERBOSE)) && printf "[OK] integrity: Recreating $HASHDIR/$i.mtree started\n"
-		cd $BACKUP; $MTREE $MTREEKEYS -c -p $i/ > $HASHDIR/$i.mtree
-		(($VERBOSE)) && printf "[OK] integrity: Recreating $HASHDIR/$i.mtree finished\n"
+		(($VERBOSE)) && printf "[OK] integrity: Recreate $METADIR/$i.$EXTHASH started\n"
+		cd $LINKDIR; $HASHDEEP -e -o f -l -r $i/ > $METADIR/$i.$EXTHASH
+		(($VERBOSE)) && printf "[OK] integrity: Recreate $METADIR/$i.$EXTHASH finished\n"
+		(($VERBOSE)) && printf "[OK] integrity: Recreate $METADIR/$i.$EXTMTREE started\n"
+		cd $LINKDIR; $MTREE $MTREEKEYS -c -p $i/ > $METADIR/$i.$EXTMTREE
+		(($VERBOSE)) && printf "[OK] integrity: Recreating $METADIR/$i.$EXTMTREE finished\n"
 	    done
 	    exit
 	    ;;
