@@ -62,19 +62,21 @@ fi
 function check-integrity {
 	 (($VERBOSE)) && printf "[OK] integrity: *** $CLIENT check started\n"
 	 if LOG=$(cd $LINKDIR; $HASHDEEP $HASHDEEPCONF $METADIR/$CLIENT.$EXTHASH $CLIENT/ 2>&1); then
-	     (($VERBOSE)) && printf "[OK] integrity: $CLIENT hash correct\n"
-	     (($VERBOSE)) && [[ ! -z $LOG ]] && printf "[OK] integrity: hashdeep: $LOG\n"
+	     [[ ! -z $LOG ]] && printf "[ERR] integrity: $HASHDEEP log: $LOG\n"
+	     (($VERBOSE)) && printf "[OK] integrity: hash check finished\n"
 	 else
-	     printf "[ERR] integrity: $CLIENT hash error $?\n"
-	     printf "[ERR] integrity: hashdeep: $LOG\n"
+	     printf "[ERR] integrity: $CLIENT $HASHDEEP error: $?\n"
+	     printf "[ERR] integrity: $CLIENT $HASHDEEP log: $LOG\n"
 	 fi
 	 if LOG=$(cd $LINKDIR; $MTREE -f $METADIR/$CLIENT.$EXTMTREE -p $CLIENT/ 2>&1); then
 	     (($VERBOSE)) && printf "[OK] integrity: $CLIENT mtree correct\n"
 	     (($VERBOSE)) && [[ ! -z $LOG ]] && printf "[OK] integrity: mtree: $LOG\n"
 	 else
-	     printf "[ERR] integrity: $CLIENT mtree error $?\n"
-	     printf "[ERR] integrity: mtree: $LOG\n"
+	     printf "[ERR] integrity: $CLIENT mtree error: $?\n"
+	     printf "[ERR] integrity: $CLIENT mtree log: $LOG\n"
 	 fi
+	 (($VERBOSE)) && printf "[OK] integrity: *** $CLIENT check finished\n"
+
 }
 
 VERBOSE=1
