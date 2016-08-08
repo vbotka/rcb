@@ -1,0 +1,4 @@
+---
+- hosts: do-ubuntu-test
+  roles:
+      - role: ansible-rcb

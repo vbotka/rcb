@@ -1,3 +1,7 @@
+THESE NOTES ARE OBSOLETE.
+DEFAULT INSTALLATION IS AVAILABLE WITH https://github.com/vbotka/ansible-rcb
+--
+
 Below are the cut&paste notes from testing the scripts on 2 fresh
 instalations of Ubuntu 14.04 (srv, backup)
 
