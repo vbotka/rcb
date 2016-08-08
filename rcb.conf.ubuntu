@@ -26,7 +26,7 @@ RSYNCRYPTO_TRIM_E="4"
 RSYNCRYPTO_TRIM_D="2"
 # TODO: use awk '{print patsplit($0, array , "/")}'
 
-RCB_CRT_ROOT="/root/cert/backup"
+RCB_CRT_ROOT="/root/cert/rcb"
 RCB_KEYS="$RCB_CRT_ROOT/keys"
 RCB_CRT="$RCB_CRT_ROOT/backup.crt"
 RCB_NAMES="$RCB_CRT_ROOT/encrypted_names"
@@ -93,7 +93,7 @@ RCB_SPECIALS=".rcb-specials.txt"
 RCB_DIGESTS=".rcb-digests.txt"
 
 RCB_LOG_ROOT="/var/log"
-RCB_LOG="$RCB_LOG_ROOT/rcb-central.log"
+RCB_LOG="$RCB_LOG_ROOT/rcb.log"
 
 RCB_LOG_TEMP_ROOT="/tmp"
 RCB_LOG_TEMP="$RCB_LOG_TEMP_ROOT/rcb-temp.log"

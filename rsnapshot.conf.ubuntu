@@ -50,9 +50,9 @@ link_dest	1
 
 ### BACKUP POINTS / SCRIPTS ###
 # LOCALHOST
-backup	/scratch/test/		localhost/
-backup	/etc/			localhost/
-backup	/root/			localhost/
-exclude	/root/cert/backup/keys
-exclude	/root/cert/backup/backup.key
+#backup	/scratch/rcb/test/	localhost/
+#backup	/etc/			localhost/
+#backup	/root/			localhost/
+exclude	/root/cert/rcb/keys
+exclude	/root/cert/rcb/backup.key
 exclude	.git/
