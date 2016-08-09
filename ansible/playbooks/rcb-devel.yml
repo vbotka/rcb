@@ -1,0 +1,9 @@
+---
+
+- hosts: rcb-devel
+
+  tasks:
+    - name: Copy current project to /usr/local/src/rcb
+      synchronize: src=/scratch/rcb dest=/usr/local/src
+    - name: Create symbolic link src to /usr/local/src/rcb
+      file: src=/usr/local/src/rcb dest=/usr/local/src/src state=link
