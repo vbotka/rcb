@@ -75,6 +75,9 @@ RSYNC_PARAM="--progress --delete -ahv"
 # own risk!
 RSYNC_INCLUDE_FROM="true"
 RSYNC_INCLUDE_FROM_FILE="--include-from=$RSYNCRYPTO_EXPORT_CHANGES"
+RSYNC_StrictHostKeyChecking="false"
+RSYNC_StrictHostKeyChecking_No="ssh -o StrictHostKeyChecking=no"
+RSYNC_StrictHostKeyChecking_Yes="ssh -o StrictHostKeyChecking=yes"
 
 MTREE="/usr/sbin/mtree"
 MTREE_PARAM="-c -p"

@@ -12,8 +12,15 @@ if [ $RSYNC_INCLUDE_FROM == "true" ]; then
     printf "$(date) [OK] $RSYNC_INCLUDE_FROM_FILE\n" >> $RCB_LOG
 fi
 
+if [ $RSYNC_StrictHostKeyChecking == "false" ]; then
+    export RSYNC_RSH="$RSYNC_StrictHostKeyChecking_No"
+    printf "$(date) [OK] RSYNC_RSH: $RSYNC_RSH\n" >> $RCB_LOG
+else
+    export RSYNC_RSH="$RSYNC_StrictHostKeyChecking_Yes"
+    printf "$(date) [OK] RSYNC_RSH: $RSYNC_RSH\n" >> $RCB_LOG
+fi
 
-if ($RSYNC $RSYNC_PARAM -e ssh $SRC/ $DST > $RCB_LOG_TEMP 2>&1); then
+if ($RSYNC $RSYNC_PARAM $SRC/ $DST > $RCB_LOG_TEMP 2>&1); then
     printf "$(date) [OK] *** Rsync from $SRC/ to $DST finished\n" >> $RCB_LOG
 else
     printf "$(date) [ERR] Rsync from $SRC/ to $DST failed\n" >> $RCB_LOG
