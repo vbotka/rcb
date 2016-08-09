@@ -9,6 +9,6 @@ Rsyncrypto ensures that doing rsync to synchronize the encrypted files
 to another machine will have only a small impact on rsync's
 efficiency.
 
-Installation and sonfiguration tested with [https://github.com/vbotka/ansible-rcb]
+Installation and configuration tested with https://github.com/vbotka/ansible-rcb
 
 RCB is licensed under BSD 2-clause “Simplified” License.
