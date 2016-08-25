@@ -1,6 +1,22 @@
-THESE NOTES ARE OBSOLETE.
-DEFAULT INSTALLATION IS AVAILABLE WITH https://github.com/vbotka/ansible-rcb
+ANSIBLE DEFAULT INSTALLATION
+- https://github.com/vbotka/ansible-rcb
+- https://galaxy.ansible.com/vbotka/ansible-rcb/
+
+Tested scenario (Ubuntu 16.04 at DO):
+  1a) create droplets client, backup)
+  1b) install python2.7 on client, backup
+  2)  change the IP addresses in the inventory in rcb.yml 
+  3)  change the IP address of rcb_BCK_HOST variable
+  4)  change rcb_user_password variable in rcb-backup-server.yml
+  5)  ansible-playbook ~/.ansible/playbooks/rcb.yml -t phase1
+  6)  ansible-playbook ~/.ansible/playbooks/rcb-backup-server.yml
+  7)  ansible-playbook ~/.ansible/playbooks/rcb.yml -t phase2
+  8a) ansible-playbook ~/.ansible/playbooks/rcb.yml -t testall
+  8b) view log at client # tail -f /var/log/rcb.log
+  9)  create crontab entry
 --
+
+THESE NOTES ARE OBSOLETE.
 
 Below are the cut&paste notes from testing the scripts on 2 fresh
 instalations of Ubuntu 14.04 (srv, backup)
