@@ -1,4 +1,7 @@
 ---
+
 - hosts: do-ubuntu-test
+  vars_files:
+    - ~/.ansible/vars/rcb.yml
   roles:
-      - role: ansible-rcb
+    - vbotka.ansible-rcb
