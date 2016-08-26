@@ -1,4 +1,7 @@
-RCB (Rsync-Crypto-Backup) is a set of scripts that
+RCB (Rsync-Crypto-Backup)
+=========================
+
+is a set of scripts that:
 
 * create local backup with rsnapshot
 * encrypt the local backup with rsyncrypto
