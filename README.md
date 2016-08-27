@@ -1,6 +1,6 @@
 RCB (Rsync-Crypto-Backup)
 =========================
-[![Build Status](https://travis-ci.org/vbotka/ansible-rcb.svg?branch=master)](https://travis-ci.org/vbotkaa/ansible-role-ntp)
+[![Build Status](https://travis-ci.org/vbotka/rcb.svg?branch=master)](https://travis-ci.org/vbotkaa/rcb)
 
 is a set of scripts that:
 
