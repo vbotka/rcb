@@ -1,6 +1,6 @@
 RCB (Rsync-Crypto-Backup)
 =========================
-![license](https://img.shields.io/badge/license-BSD-red.svg)
+[![license](https://img.shields.io/badge/license-BSD-red.svg)](https://www.freebsd.org/doc/en/articles/bsdl-gpl/article.html)
 
 RCB is a set of scripts that:
 
