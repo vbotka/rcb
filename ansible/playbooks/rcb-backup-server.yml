@@ -4,16 +4,19 @@
 
   # Define user and password variables
   vars:
-    rcb_user: rcbackup        
-    rcb_group: rcbackup        
-    rcb_user_password: gu2KmqcJp0Yyo
-    backup_dir: /scratch/backup
+    rcb_user: "rcbackup"
+    rcb_group: "rcbackup"
+    rcb_user_password: "password"
+    backup_dir: "/scratch/backup"
 
   # Define tasks
   tasks:
     - name: Create user {{ rcb_user }}
-      user: name="{{ rcb_user }}" password="{{ rcb_user_password }}" shell=/bin/bash
-            update_password=on_create
+      user: >
+        name="{{ rcb_user }}"
+        password="{{ rcb_user_password }}"
+        shell="/bin/bash"
+        update_password="on_create"
       register: rcbuser
       
   #    - name: Force user to change password
@@ -21,16 +24,27 @@
   #      when: rcbuser.changed
       
     - name: Create directory for encrypted backups {{ backup_dir }}
-      file: state=directory path="{{ backup_dir }}"
+      file: >
+        state="directory"
+        path="{{ backup_dir }}"
       
     - name: Change owner and permissions of "{{ backup_dir }}" to "{{ rcb_user }}" 0700
-      file: path="{{ backup_dir }}" owner="{{ rcb_user }}" group="{{ rcb_group }}" mode=0700
+      file: >
+        path="{{ backup_dir }}"
+        owner="{{ rcb_user }}"
+        group="{{ rcb_group }}"
+        mode="0700"
 
     - debug: msg="Public key {{item}}"
       with_fileglob:
         - "/tmp/{{ansible_default_ipv4.address}}/*.id_rsa.pub"
 
     - name: Set up authorized_keys for "{{ rcb_user }}"
-      authorized_key: user="{{ rcb_user }}" key="{{ lookup('file', '{{ item }}')}}"
+      authorized_key: >
+        user="{{ rcb_user }}"
+        key="{{ lookup('file', '{{ item }}')}}"
       with_fileglob:
         - "/tmp/{{ansible_default_ipv4.address}}/*.id_rsa.pub"
+
+# EOF
+...

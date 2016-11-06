@@ -1,6 +1,6 @@
 
 [do-ubuntu-test]
-138.68.79.49
+192.168.1.10
 
 [do-ubuntu-test:vars]
 # digitalocean.com Ubuntu 16.04 needs python2.x
@@ -11,7 +11,7 @@ ansible_python_interpreter=/usr/bin/python2.7
 ansible_perl_interpreter=/usr/bin/perl
 
 [do-ubuntu-rcb-backup]
-46.101.120.127
+192.168.2.10
 
 [do-ubuntu-rcb-backup:vars]
 # digitalocean.com Ubuntu 16.04 needs python2.x

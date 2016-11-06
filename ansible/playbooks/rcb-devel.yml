@@ -4,6 +4,14 @@
 
   tasks:
     - name: Copy current project to /usr/local/src/rcb
-      synchronize: src=/scratch/rcb/ dest=/usr/local/src/rcb-devel/
+      synchronize: >
+        src="/scratch/rcb/"
+        dest="/usr/local/src/rcb-devel/"
+        
     - name: Create symbolic link rcb to /usr/local/src/rcb-devel
-      file: src=/usr/local/src/rcb-devel dest=/usr/local/src/rcb state=link
+      file: >
+        src="/usr/local/src/rcb-devel"
+        dest="/usr/local/src/rcb state=link"
+
+# EOF
+...

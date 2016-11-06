@@ -5,3 +5,6 @@
     - ~/.ansible/vars/rcb.yml
   roles:
     - vbotka.ansible-rcb
+
+# EOF
+...
