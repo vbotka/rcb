@@ -4,12 +4,12 @@ RCB (Rsync-Crypto-Backup)
 
 RCB is a set of scripts that:
 
-* create local backup with *rsnapshot*
-* encrypt the local backup with *rsyncrypto*
-* sync encrypted backup to the remote server with *rsync*
-* restore the backup and compare the restored data with the origin
+* Create local backup with *rsnapshot*
+* Encrypt the local backup with *rsyncrypto*
+* Sync encrypted backup to the remote server with *rsync*
+* Restore the backup and compare the restored data with the origin
 
 [Rsyncrypto](http://rsyncrypto.lingnu.com/) ensures that doing rsync to synchronize the encrypted files
 to another machine will have only a small impact on rsync's efficiency.
 
-Installation and configuration tested with https://galaxy.ansible.com/vbotka/rcb/
+Installation and configuration tested with https://galaxy.ansible.com/vbotka/rcb/ version 0.2.0 (client Ubuntu 17.04, server FreeBSD 10.3)

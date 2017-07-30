@@ -1,50 +1,51 @@
 ---
 
-- hosts: do-ubuntu-rcb-backup
+- hosts: backup.example.com
+  connection: local
+  become_user: root
+  become: yes
+  become_method: sudo
 
-  # Define user and password variables
-  vars:
-    rcb_user: "rcbackup"
-    rcb_group: "rcbackup"
-    rcb_user_password: "password"
-    backup_dir: "/scratch/backup"
+  # Variables
+  vars_files:
+        - ~/.ansible/vars/rcb-backup-server.yml
+#  vars:
+#    rcb_BCK_SHELL: "/bin/bash"
+#    rcb_BCK_USER: "rcbackup"
+#    rcb_BCK_GROUP: "rcbackup"
+#    rcb_BCK_DST: "/scratch/rcb"
+# BCK_DST will be replaced with rcb_BCK_DST/ansible_hostname
 
-  # Define tasks
+  # Tasks
   tasks:
-    - name: Create user {{ rcb_user }}
+    - name: Create user "{{ rcb_BCK_USER }}"
       user: >
-        name="{{ rcb_user }}"
-        password="{{ rcb_user_password }}"
-        shell="/bin/bash"
-        update_password="on_create"
+        name="{{ rcb_BCK_USER }}"
+        shell="{{ rcb_BCK_SHELL }}"
       register: rcbuser
       
-  #    - name: Force user to change password
-  #      shell: chage -d 0 "{{ rcb_user }}"
-  #      when: rcbuser.changed
-      
-    - name: Create directory for encrypted backups {{ backup_dir }}
+    - name: Create directory for encrypted backups "{{ rcb_BCK_DST }}"
       file: >
         state="directory"
-        path="{{ backup_dir }}"
+        path="{{ rcb_BCK_DST }}"
       
-    - name: Change owner and permissions of "{{ backup_dir }}" to "{{ rcb_user }}" 0700
+    - name: Change owner and permissions of "{{ rcb_BCK_DST }}" to "{{ rcb_BCK_USER }}" 0700
       file: >
-        path="{{ backup_dir }}"
-        owner="{{ rcb_user }}"
-        group="{{ rcb_group }}"
+        path="{{ rcb_BCK_DST }}"
+        owner="{{ rcb_BCK_USER }}"
+        group="{{ rcb_BCK_GROUP }}"
         mode="0700"
 
-    - debug: msg="Public key {{item}}"
-      with_fileglob:
-        - "/tmp/{{ansible_default_ipv4.address}}/*.id_rsa.pub"
+#    - debug: msg="Public key {{item}}"
+#      with_fileglob:
+#        - "/tmp/{{ inventory_hostname }}/*.id_rsa.pub"
 
-    - name: Set up authorized_keys for "{{ rcb_user }}"
+    - name: Set up authorized_keys for "{{ rcb_BCK_USER }}"
       authorized_key: >
-        user="{{ rcb_user }}"
+        user="{{ rcb_BCK_USER }}"
         key="{{ lookup('file', '{{ item }}')}}"
       with_fileglob:
-        - "/tmp/{{ansible_default_ipv4.address}}/*.id_rsa.pub"
+        - "/tmp/{{ inventory_hostname }}/*.id_rsa.pub"
 
 # EOF
 ...

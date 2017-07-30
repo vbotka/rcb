@@ -1,0 +1,5 @@
+rcb_BCK_SHELL: "/bin/bash"
+rcb_BCK_USER: "rcbackup"
+rcb_BCK_GROUP: "rcbackup"
+rcb_BCK_DST: "/scratch/rcb"
+# BCK_DST will be replaced with rcb_BCK_DST/ansible_hostname
