@@ -1,7 +1,7 @@
 ---
 
 - hosts: backup.example.com
-  connection: local
+  connection: ssh
   become_user: root
   become: yes
   become_method: sudo
