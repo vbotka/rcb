@@ -19,6 +19,13 @@ rcb-encrypt.sh
 
 `[rcb-encrypt.sh] <https://github.com/vbotka/rcb/blob/master/rcb-encrypt.sh>`_
 
+   1. Delete files in directory $RCB_META. If directory $RCB_META doesn't exist, create it.
+   
+   2. Create directory $RCB_META/$REMOTE if it doesn't exist. REMOTE are the directories defined in BACKUP POINTS (3rd parameter) of rsnapshot.conf
+
+   3. Store lists of empty directories, links, special files and sockets in the directory $RCB_META/$REMOTE. Create digests in $RCB_META/$REMOTE/$RCB_DIGESTS. Encrtypt $RCB_BCK_ROOT/$RCB_BCK_PREFIX to $RCB_ENC.
+
+
 rcb-rsync.sh
 ------------
 
