@@ -4,17 +4,17 @@ Installation
 Installation with Ansible
 -------------------------
 
-Examples of playbooks and variables are available at `RCB <https://github.com/vbotka/rcb/tree/master/ansible>`_ project.
 
-
-1. Install the role
+1.Install Ansible role
 
 .. code-block:: bash
 
   > ansible-galaxy install vbotka.rcb
 
    
-2. Edit and change at least these variables
+2.Configure variables
+
+Examples of playbooks and variables are available at `RCB <https://github.com/vbotka/rcb/tree/master/ansible>`_. Edit and change at least following variables.
 
 * *rcb_BCK_HOST* and *rcb_BCK_DST* in *vars/rcb.yml*
 * *rcb_BCK_DST* in *vars/rcb-backup-server.yml*
@@ -22,27 +22,26 @@ Examples of playbooks and variables are available at `RCB <https://github.com/vb
 * *hosts* in *playbooks/rcb-backup-server.yml*
 
   
-3. Following workflow was tested with Ubuntu and FreeBSD (remote Backup-Server)
+3.Run Ansible playbooks
 
-Create SSH keys at Backup-Clients and stores the public keys at the localhost
+Following workflow was tested with Ubuntu(local Backup-Client) and FreeBSD (remote Backup-Server).
+
+a) Create SSH keys at Backup-Clients and stores the public keys at the localhost
 
 .. code-block:: bash
 
-  > rcb.yml -t phase1
   > ansible-playbook ~/.ansible/playbooks/rcb.yml -t phase1
 
-Configures the Backup-Server
+b) Configure the ssh access of Backup-Clients to Backup-Server. Store the public keys of Backup-Clients, created in phase1, into the ~/rcb_BCK_USER/.ssh/authorized_keys.
 
 .. code-block:: bash
 
-  > rcb-backup-server.yml
   > ansible-playbook ~/.ansible/playbooks/rcb-backup-server.yml
 
-Configures the Backup-Clients
+c) Configure the Backup-Clients.
 
 .. code-block:: bash
 
-  > rcb.yml -t phase2
   > ansible-playbook ~/.ansible/playbooks/rcb.yml -t phase2
 
 
