@@ -1,6 +1,6 @@
 RCB (Rsync-Crypto-Backup)
 =========================
-[![license](https://img.shields.io/badge/license-BSD-red.svg)](https://www.freebsd.org/doc/en/articles/bsdl-gpl/article.html)
+[![license](https://img.shields.io/badge/license-BSD-red.svg)](https://www.freebsd.org/doc/en/articles/bsdl-gpl/article.html) ![Build Status](https://readthedocs.org/projects/redis-c-examples/badge/?version=latest)
 
 RCB is a set of scripts that:
 
@@ -13,3 +13,5 @@ RCB is a set of scripts that:
 to another machine will have only a small impact on rsync's efficiency.
 
 Installation and configuration tested with https://galaxy.ansible.com/vbotka/rcb/ version 0.2.0 (client Ubuntu 17.04, server FreeBSD 10.3)
+
+Documentation is hosted at [ReadTheDoc](http://rcb.readthedocs.io/).
