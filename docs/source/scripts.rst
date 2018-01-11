@@ -31,7 +31,7 @@ Run rsnapshot.
 `rcb-rsync.sh <https://github.com/vbotka/rcb/blob/master/rcb-rsync.sh>`_
 --------------------------------------------------------------------------
 
-Rsync encrypted data from SRC to DST, defined as follows.
+Rsync encrypted data from SRC to DST, defined as follows
 
 .. code-block:: bash
 
@@ -63,7 +63,7 @@ Running the script with -l will symlink $RCB_ENC to $RCB_ENCR.
 `rcb-decrypt.sh <https://github.com/vbotka/rcb/blob/master/rcb-decrypt.sh>`_
 ------------------------------------------------------------------------------
 
-Dencrypted data from SRC to DST, defined as follows.
+Dencrypt data from SRC to DST, defined as follows
 
 .. code-block:: bash
 
