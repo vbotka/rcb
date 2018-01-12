@@ -1,6 +1,6 @@
 MAILTO=""
-15 */4 * * *	/root/bin/rcb-rsnapshot.sh -i=hourly
-15 1   * * 1	/root/bin/rcb-rsnapshot.sh -i=weekly	
-15 2   1 * *	/root/bin/rcb-rsnapshot.sh -i=monthly	
-15 5   * * *	/root/bin/rcb-daily-encrypt-rsync-decrypt-restore.sh
-
+PATH=/root/bin
+15 */4 * * *	rcb-rsnapshot.sh -i=hourly
+15 1   * * 1	rcb-rsnapshot.sh -i=weekly	
+15 2   1 * *	rcb-rsnapshot.sh -i=monthly	
+15 5   * * *	rcb-daily-encrypt-rsync-decrypt-restore.sh
