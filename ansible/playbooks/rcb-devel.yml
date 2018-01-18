@@ -1,18 +1,59 @@
 ---
 
 - hosts: rcb-devel
+  become: yes
+  become_method: sudo
+
+  vars:
+    bin_dir: "/root/bin" # without trailing slash
+    bin_items: {}
+    source_path: "/scratch/rcb/" # with trailing slash
+    source_dest: "/usr/local/src/rcb-current/" # with trailing slash
+    source_link: "/usr/local/src/rcb"
+    source_lock: "/usr/local/src/rcb-current.lock"
+    source_lock_set: "yes"
+
 
   tasks:
-    - name: Copy current project to /usr/local/src/rcb
-      synchronize: >
-        src="/scratch/rcb/"
-        dest="/usr/local/src/rcb-devel/"
-        
-    - name: Create symbolic link rcb to /usr/local/src/rcb-devel
+
+    - name: Install rsync (FreeBSD)
+      pkgng: name="{{item}}" state="present"
+      with_items:
+        - rsync
+      when: ansible_os_family == "FreeBSD"
+
+    - name: Install rsync (Debian)
+      apt: name="{{item}}" state="installed"
+      with_items:
+       - rsync
+      when: ansible_os_family == "Debian"
+
+    - name: Install rsync (RedHat)
+      yum: name="{{item}}" state="installed"
+      with_items:
+        - rsync
+      when: ansible_os_family == "RedHat"
+
+    - name: Copy current source to {{source_dest}}
+      synchronize:
+        src: "{{source_path}}"
+        dest: "{{source_dest}}"
+        rsync_opts:
+          - "--no-motd"
+          - "--exclude=.git"
+
+    - name: Create symbolic link to {{source_dest}}
       file: >
-        src="/usr/local/src/rcb-devel"
-        dest="/usr/local/src/rcb"
+        src="{{source_dest}}"
+        dest="{{source_link}}"
         state="link"
+        force="yes"
+
+    - name: Lock development version
+      command: sh -c "if [ ! -e {{source_lock}} ]; then touch {{source_lock}}; printf 'current-lock-changed'; fi"
+      register: command_result
+      when: source_lock_set == "yes"
+      changed_when: command_result.stdout == "current-lock-changed"
 
 # EOF
 ...

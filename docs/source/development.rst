@@ -1,15 +1,17 @@
 Development
 ===========
 
-Copy local changes to Backup client
+To facilitate the deployment and testing the `rcb project <https://github.com/vbotka/rcb>`_ provides the playbook `rcb-devel <https://github.com/vbotka/rcb/blob/master/ansible/playbooks/rcb-devel.yml>`_ to copy the scripts to staging.  The following sequence of commands copy, patch and install the scripts.
 
 .. code-block:: bash
 
   > ansible-playbook ~/.ansible/playbooks/rcb-devel.yml
+  > ansible-playbook ~/.ansible/playbooks/rcb.yml -t rcb_source_patch
+  > ansible-playbook ~/.ansible/playbooks/rcb.yml -t rcb_copy_scripts
 
-Test it
+The scripts then can be tested.
 
 .. code-block:: bash
 
-  > ansible-playbook ~/.ansible/playbooks/rcb.yml -t devel
+  > ansible-playbook ~/.ansible/playbooks/rcb.yml -t testall
 
