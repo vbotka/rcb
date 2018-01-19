@@ -5,10 +5,10 @@
   become_method: sudo
 
   vars:
-    bin_dir: "/root/bin" # without trailing slash
+    bin_dir: "/root/bin"
     bin_items: {}
-    source_path: "/scratch/rcb/" # with trailing slash
-    source_dest: "/usr/local/src/rcb-current/" # with trailing slash
+    source_path: "/scratch/rcb"
+    source_dest: "/usr/local/src/rcb-current"
     source_link: "/usr/local/src/rcb"
     source_lock: "/usr/local/src/rcb-current.lock"
     source_lock_set: "yes"
@@ -34,23 +34,23 @@
         - rsync
       when: ansible_os_family == "RedHat"
 
-    - name: Copy current source to {{source_dest}}
+    - name: Copy current source to {{ source_dest }}
       synchronize:
-        src: "{{source_path}}"
-        dest: "{{source_dest}}"
+        src: "{{ source_path }}"
+        dest: "{{ source_dest }}"
         rsync_opts:
           - "--no-motd"
           - "--exclude=.git"
 
-    - name: Create symbolic link to {{source_dest}}
+    - name: Create symbolic link to {{ source_dest }}
       file: >
-        src="{{source_dest}}"
-        dest="{{source_link}}"
+        src="{{ source_dest }}"
+        dest="{{ source_link }}"
         state="link"
         force="yes"
 
     - name: Lock development version
-      command: sh -c "if [ ! -e {{source_lock}} ]; then touch {{source_lock}}; printf 'current-lock-changed'; fi"
+      command: sh -c "if [ ! -e {{ source_lock }} ]; then touch {{ source_lock }}; printf 'current-lock-changed'; fi"
       register: command_result
       when: source_lock_set == "yes"
       changed_when: command_result.stdout == "current-lock-changed"
