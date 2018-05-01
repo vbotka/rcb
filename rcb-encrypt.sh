@@ -1,6 +1,8 @@
 #!/usr/local/bin/bash
 
-source /usr/local/etc/rcb.conf
+MY_PATH=`dirname "$0"`
+. $MY_PATH/rcb-functions.sh
+read_config
 
 SRC="$RCB_BCK_ROOT/$RCB_BCK_PREFIX"
 DST="$RCB_ENC"

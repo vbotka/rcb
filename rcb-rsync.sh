@@ -1,6 +1,9 @@
 #!/usr/local/bin/bash
 
-source /usr/local/etc/rcb.conf
+MY_PATH=`dirname "$0"`
+. $MY_PATH/rcb-functions.sh
+read_config
+
 SRC="$RCB_ENC"
 DST="$BCK_USER@$BCK_HOST:$BCK_DST"
 RCB_LOG_TEMP="$RCB_LOG_TEMP_RSYNC"
@@ -31,3 +34,5 @@ else
 fi
 
 exit
+
+# EOF

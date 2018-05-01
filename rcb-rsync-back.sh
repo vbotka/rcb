@@ -1,6 +1,8 @@
 #!/usr/local/bin/bash
 
-source /usr/local/etc/rcb.conf
+MY_PATH=`dirname "$0"`
+. $MY_PATH/rcb-functions.sh
+read_config
 
 USAGE="$(basename "$0") [-h|--help] [-l|--link] [-d|--delete] -- rsync from backup
 where:
@@ -80,3 +82,5 @@ else
 fi
 
 exit
+
+# EOF

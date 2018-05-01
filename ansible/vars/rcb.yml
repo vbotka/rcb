@@ -5,7 +5,7 @@ rcb_BCK_DST: "/scratch/rcb"
 
 #
 # source
-rcb_source_version: "0.2.0"
+rcb_source_version: "1.0.0"
 rcb_source_file: "{{rcb_source_version}}.tar.gz"
 rcb_source_dir: "rcb-{{rcb_source_version}}"
 rcb_source_dest: "/usr/local/src"
@@ -15,17 +15,16 @@ rcb_source_url: "https://github.com/vbotka/rcb/archive"
 rcb_bin_dir: "/root/bin"
 rcb_etc_dir: "/usr/local/etc"
 rcb_snapshot_root: "/scratch/rcb/backup/snapshots"
-rcb_test_dir: "/scratch/rcb/test"
 
-# files
+# conf
 rcb_rcb_conf: "rcb.conf"
 rcb_rsnapshot_conf: "rsnapshot.conf"
 
-# CN
+# certificate
 rcb_cert_CN: "example.com"
+rcb_privatekey_passphrase: "passphrase"
 
 # rcb.conf
-#
 # RCB_HOST will be replaced with ansible_hostname
 rcb_RCB_EMAIL: "root"
 rcb_RCB_BCK_ROOT: "/scratch/rcb/backup"

@@ -1,6 +1,8 @@
 #!/usr/local/bin/bash
 
-source /usr/local/etc/rcb.conf
+MY_PATH=`dirname "$0"`
+. $MY_PATH/rcb-functions.sh
+read_config
 
 function rcb_delete {
     if (rm $RCB_PAR1 $RCB_PAR2 >$RCB_LOG_TEMP 2>&1); then
@@ -14,7 +16,7 @@ function rcb_delete {
     fi
     }
 
-printf "$(date) [OK] *** Delete of encrypted data, meta, keys and names started\n" >> $RCB_LOG
+printf "$(date) [OK] *** Delete encrypted data, meta, keys and names started\n" >> $RCB_LOG
 RCB_PAR1="-rf"
 RCB_PAR2="$RCB_ENC"
 rcb_delete
@@ -30,3 +32,5 @@ rcb_delete
 printf "$(date) [OK] *** Encrypted data, meta, keys and names deleted\n" >> $RCB_LOG
 
 exit
+
+# EOF

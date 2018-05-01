@@ -1,11 +1,13 @@
 #!/usr/local/bin/bash
 
-source /usr/local/etc/rcb.conf
+MY_PATH=`dirname "$0"`
+. $MY_PATH/rcb-functions.sh
+read_config
 
 USAGE="$(basename "$0") [-h|--help] [-i|--increment=[hourly,daily,weekly,monthly]] -- rsnapshot backup
 where:
-    -h --help show this help text
-    -i --increment is one of the options: hourly,daily,weekly or monthly"
+    -h --help      show this help text
+    -i --increment period [hourly,daily,weekly or monthly]"
 
 EXPECTED_ARGS=1
 if [ $# -ne $EXPECTED_ARGS ]; then
@@ -44,3 +46,5 @@ else
 fi
 
 exit
+
+# EOF

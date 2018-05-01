@@ -1,6 +1,8 @@
 #!/usr/local/bin/bash
 
-source /usr/local/etc/rcb.conf
+MY_PATH=`dirname "$0"`
+. $MY_PATH/rcb-functions.sh
+read_config
 
 SRC="$RCB_DEC"
 DST="$RCB_RST_ROOT"
@@ -86,3 +88,5 @@ SRC="$RCB_BCK_ROOT/$RCB_BCK_PREFIX"
 printf "$(date) [OK] *** $SRC restored in $DST\n" >> $RCB_LOG
 
 exit
+
+# EOF

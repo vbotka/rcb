@@ -7,7 +7,7 @@
   vars:
     bin_dir: "/root/bin"
     bin_items: {}
-    source_path: "/scratch/rcb"
+    source_path: "/scratch/rcb/" # If rcb is a symbolic link trailing slash is needed
     source_dest: "/usr/local/src/rcb-current"
     source_link: "/usr/local/src/rcb"
     source_lock: "/usr/local/src/rcb-current.lock"
@@ -23,13 +23,13 @@
       when: ansible_os_family == "FreeBSD"
 
     - name: Install rsync (Debian)
-      apt: name="{{item}}" state="installed"
+      apt: name="{{item}}" state="present"
       with_items:
        - rsync
       when: ansible_os_family == "Debian"
 
     - name: Install rsync (RedHat)
-      yum: name="{{item}}" state="installed"
+      yum: name="{{item}}" state="present"
       with_items:
         - rsync
       when: ansible_os_family == "RedHat"

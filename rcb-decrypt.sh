@@ -1,11 +1,13 @@
 #!/usr/local/bin/bash
 
-source /usr/local/etc/rcb.conf
+MY_PATH=`dirname "$0"`
+. $MY_PATH/rcb-functions.sh
+read_config
 
 USAGE="$(basename "$0") [-h|--help] [-d|--delete] -- decrypt backup
 where:
-    -h --help show this help text
-    -d --delete already decrypted data, if exists"
+    -h --help   show this help text
+    -d --delete decrypted data, if exist"
 
 DST_DEL="false"
 for i in "$@"; do
@@ -55,6 +57,7 @@ else
     fi
 fi
 
+MESSAGE="  run: $RSYNCRYPTO $RSYNCRYPTO_PARAM_D -d -r $SRC $DST $RCB_KEYS $RCB_CRT"; log-dbg
 if ($RSYNCRYPTO $RSYNCRYPTO_PARAM_D -d -r $SRC $DST $RCB_KEYS $RCB_CRT > $RCB_LOG_TEMP 2>&1); then
     printf "$(date) [OK] *** Decryption from $SRC to $DST finished\n" >> $RCB_LOG
 else
@@ -66,3 +69,5 @@ else
 fi
 
 exit
+
+# EOF

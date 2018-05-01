@@ -18,9 +18,10 @@ Examples of playbooks and variables are available at `RCB <https://github.com/vb
 
 * *rcb_BCK_HOST* and *rcb_BCK_DST* in *vars/rcb.yml*
 * *rcb_BCK_DST* in *vars/rcb-backup-server.yml*
+* *rcb_privatekey_passphrase* in *vars/rcb.yml*
+* *rcb_cert_CN* in *vars/rcb.yml*
 * *hosts* in *playbooks/rcb.yml*
 * *hosts* in *playbooks/rcb-backup-server.yml*
-* Change password in *roles/vbotka.rcb/files/pem-pass-phrase*
 
   
 3.Run Ansible playbooks

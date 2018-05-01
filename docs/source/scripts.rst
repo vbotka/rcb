@@ -12,8 +12,8 @@ Run rsnapshot.
   > /root/bin/rcb-rsnapshot.sh
   rcb-rsnapshot.sh [-h|--help] [-i|--increment=[hourly,daily,weekly,monthly]] -- rsnapshot backup
   where:
-      -h --help show this help text
-      -i --increment is one of the options: hourly,daily,weekly or monthly
+      -h --help      show this help text
+      -i --increment period [hourly,daily,weekly or monthly]
 
 
 `rcb-encrypt.sh <https://github.com/vbotka/rcb/blob/master/rcb-encrypt.sh>`_
@@ -76,8 +76,8 @@ Running the script with -d will delete data in DST before decryption.
 
   USAGE="$(basename "$0") [-h|--help] [-d|--delete] -- decrypt backup
   where:
-    -h --help show this help text
-    -d --delete already decrypted data, if exists"
+    -h --help   show this help text
+    -d --delete decrypted data, if exist"
 
 
 `rcb-restore.sh <https://github.com/vbotka/rcb/blob/master/rcb-restore.sh>`_

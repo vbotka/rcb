@@ -14,6 +14,7 @@
 #    rcb_BCK_USER: "rcbackup"
 #    rcb_BCK_GROUP: "rcbackup"
 #    rcb_BCK_DST: "/scratch/rcb"
+#
 # BCK_DST will be replaced with rcb_BCK_DST/ansible_hostname
 
   # Tasks
@@ -24,17 +25,21 @@
         shell="{{ rcb_BCK_SHELL }}"
       register: rcbuser
       
-    - name: Create directory for encrypted backups "{{ rcb_BCK_DST }}"
+    - name: Create directory for encrypted backups
       file: >
         state="directory"
-        path="{{ rcb_BCK_DST }}"
+        path="{{ item }}"
+        with_items:
+          - "{{ rcb_BCK_DST }}"
       
-    - name: Change owner and permissions of "{{ rcb_BCK_DST }}" to "{{ rcb_BCK_USER }}" 0700
+    - name: Change owner, group and permissions
       file: >
-        path="{{ rcb_BCK_DST }}"
+        path="{{ item }}"
         owner="{{ rcb_BCK_USER }}"
         group="{{ rcb_BCK_GROUP }}"
         mode="0700"
+        with_items:
+          - "{{ rcb_BCK_DST }}"
 
 #    - debug: msg="Public key {{item}}"
 #      with_fileglob:
