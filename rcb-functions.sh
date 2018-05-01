@@ -2,7 +2,7 @@
 
 UTIL="RCB"
 CONFIG="rcb.conf"
-CONFIGVAR=${RCBCONFIG}
+CONFIGVAR=${RCBCONFIG:-}
 LOGFILE="/tmp/rcb.log"
 LOGTOFILE=1
 DEBUG=1
@@ -42,10 +42,12 @@ function read_config {
 	MESSAGE="  configuration: ./.$CONFIG found."; log-dbg
 	. ./.$CONFIG
     fi
-    if [ -r $CONFIGVAR ]; then
-	MESSAGE="  configuration: $CONFIGVAR found."; log-dbg
-	. $CONFIGVAR
-    fi	
+    if [ ! -z ${CONFIGVAR} ]; then
+	if [ -r $CONFIGVAR ]; then
+	    MESSAGE="  configuration: $CONFIGVAR found."; log-dbg
+	    . $CONFIGVAR
+	fi
+    fi
 }
 
 # EOF
