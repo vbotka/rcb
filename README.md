@@ -12,6 +12,6 @@ RCB is a set of scripts that:
 [Rsyncrypto](http://rsyncrypto.lingnu.com/) ensures that doing rsync to synchronize the encrypted files
 to another machine will have only a small impact on rsync's efficiency.
 
-Installation and configuration tested with https://galaxy.ansible.com/vbotka/rcb/ version 0.2.0 (client Ubuntu 17.04, server FreeBSD 10.3)
+Installation and configuration tested with [Ansible role](https://galaxy.ansible.com/vbotka/rcb/) (client Ubuntu 18.04, server FreeBSD 10.3).
 
 Documentation is available at [ReadTheDoc](http://rcb.readthedocs.io/).
