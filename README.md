@@ -18,6 +18,6 @@ Documentation is available at [ReadTheDoc](http://rcb.readthedocs.io/).
 
 References
 ----------
-[Rsyncrypto project](https://sourceforge.net/projects/rsyncrypto/)
-[Efficient rsyncrypto hides remote sync data](https://www.linux.com/news/efficient-rsyncrypto-hides-remote-sync-data)
-[Why does rsyncrypto require a public key during decryption?](https://crypto.stackexchange.com/questions/26301/why-does-rsyncrypto-require-a-public-key-during-decryption)
+* [Rsyncrypto project](https://sourceforge.net/projects/rsyncrypto/)
+* [Efficient rsyncrypto hides remote sync data](https://www.linux.com/news/efficient-rsyncrypto-hides-remote-sync-data)
+* [Why does rsyncrypto require a public key during decryption?](https://crypto.stackexchange.com/questions/26301/why-does-rsyncrypto-require-a-public-key-during-decryption)
