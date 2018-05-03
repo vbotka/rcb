@@ -5,8 +5,8 @@ CONFIG="rcb.conf"
 CONFIGVAR=${RCBCONFIG:-}
 LOGFILE="/tmp/rcb.log"
 LOGTOFILE=1
-DEBUG=1
 VERB0SE=1
+DEBUG=0
 
 
 function log-ok {
@@ -27,24 +27,24 @@ function log-err {
 
 function read_config {
     if [[ -f /etc/$CONFIG ]]; then
-	MESSAGE="  configuration: /etc/$CONFIG found."; log-dbg
+	MESSAGE="  configuration: /etc/$CONFIG found."; log-ok
 	. /etc/$CONFIG
     fi
     if [[ -f /usr/local/etc/$CONFIG ]]; then
-	MESSAGE="  configuration: /usr/local/etc/$CONFIG found."; log-dbg
+	MESSAGE="  configuration: /usr/local/etc/$CONFIG found."; log-ok
 	. /usr/local/etc/$CONFIG
     fi
     if [[ -f ~/.$CONFIG ]]; then
-	MESSAGE="  configuration: ~/.$CONFIG found."; log-dbg
+	MESSAGE="  configuration: ~/.$CONFIG found."; log-ok
 	. ~/.$CONFIG
     fi
     if [[ -f ./.$CONFIG ]]; then
-	MESSAGE="  configuration: ./.$CONFIG found."; log-dbg
+	MESSAGE="  configuration: ./.$CONFIG found."; log-ok
 	. ./.$CONFIG
     fi
     if [ ! -z ${CONFIGVAR} ]; then
 	if [ -r $CONFIGVAR ]; then
-	    MESSAGE="  configuration: $CONFIGVAR found."; log-dbg
+	    MESSAGE="  configuration: $CONFIGVAR found."; log-ok
 	    . $CONFIGVAR
 	fi
     fi
