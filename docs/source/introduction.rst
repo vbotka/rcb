@@ -4,7 +4,7 @@ Introduction
 `RCB (Rsync-Crypto-Backup) <https://github.com/vbotka/rcb>`_ is a set of scripts in Bash that:
 
 * Create local backup with `rsnapshot <http://rsnapshot.org/>`_
-* Encrypt the local backup with `rsyncrypto <https://rsyncrypto.lingnu.com/>`_
+* Encrypt local backup with `rsyncrypto <https://rsyncrypto.lingnu.com/>`_
 * Sync encrypted backup to the remote server with `rsync <https://rsync.samba.org/>`_
 * Restore the backup and
 * Compare the restored data with the origin
