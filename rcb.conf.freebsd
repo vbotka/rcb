@@ -1,3 +1,6 @@
+# THIS EXAMPLE IS OBSOLTETE. USE ANSIBLE ROLE
+# https://galaxy.ansible.com/vbotka/rcb/
+
 BCK_HOST="backup.example.com"
 BCK_USER="admin"
 BCK_DST="~/backup"

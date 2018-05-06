@@ -1,3 +1,6 @@
+# THIS EXAMPLE IS OBSOLETE. USE ANSIBLE ROLE
+# https://galaxy.ansible.com/vbotka/rsnapshot/
+
 # PLEASE BE AWARE OF THE FOLLOWING RULE:        #
 # This file requires tabs between elements      #
 
