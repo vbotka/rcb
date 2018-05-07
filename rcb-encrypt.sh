@@ -127,13 +127,12 @@ printf "$(date) [OK] *** Encryption of $SRC started\n" >> $RCB_LOG
 if ($RSYNCRYPTO $RSYNCRYPTO_PARAM_E -r $SRC $DST $RCB_KEYS $RCB_CRT > $RCB_LOG_TEMP_ENC 2>&1); then
     printf "$(date) [OK] *** Encryption of $SRC finished\n" >> $RCB_LOG
 else
-    printf "$(date) [ERR] *** Encryption of $SRC failed\n" >> $RCB_LOG
+    printf "$(date) [OK] *** Encryption of $SRC finished. Exit $?\n" >> $RCB_LOG
     cat $RCB_LOG_TEMP_ENC >> $RCB_LOG
-    cat $RCB_LOG_TEMP_ENC | $MAIL -s "[ERR] $RCB_HOST Encryption of $SRC failed" $RCB_EMAIL
+    cat $RCB_LOG_TEMP_ENC | $MAIL -s "[OK] $RCB_HOST Encryption of $SRC finished. Exit $?" $RCB_EMAIL
     rm $RCB_LOG_TEMP_ENC
-    exit 1
 fi
 
-exit
+exit 0
 
 # EOF
