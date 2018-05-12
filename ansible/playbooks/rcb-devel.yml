@@ -50,10 +50,26 @@
         force="yes"
 
     - name: Lock development version
-      command: sh -c "if [ ! -e {{ source_lock }} ]; then touch {{ source_lock }}; printf 'current-lock-changed'; fi"
-      register: command_result
+      command: "touch {{ source_lock }}"
+      args:
+        creates: "{{ source_lock }}"
+        warn: False 
       when: source_lock_set == "yes"
-      changed_when: command_result.stdout == "current-lock-changed"
+# Ignore warning. Module file does not work as described.
+#     file: >
+#       path="{{ source_lock }}"
+#       state="touch"
+
+    - name: Unlock development version
+      command: "rm {{ source_lock }}"
+      args:
+        removes: "{{ source_lock }}"
+        warn: False 
+      when: source_lock_set == "no"
+# Ignore warning. Module file does not work as described.
+#     file: >
+#       path="{{ source_lock }}"
+#       state="absent"
 
 # EOF
 ...
