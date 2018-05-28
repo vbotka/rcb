@@ -50,7 +50,7 @@
         user="{{ rcb_BCK_USER }}"
         key="{{ lookup('file', '{{ item }}')}}"
       with_fileglob:
-        - "/tmp/{{ inventory_hostname }}/*.id_rsa.pub"
+        - "{{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}/*.id_rsa.pub"
 
 # EOF
 ...

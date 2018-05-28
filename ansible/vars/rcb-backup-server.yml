@@ -1,3 +1,7 @@
+# defaults
+
+rcb_root_public_keys_dir: "/tmp"
+
 rcb_BCK_SHELL: "/bin/bash"
 rcb_BCK_USER: "rcbackup"
 rcb_BCK_GROUP: "rcbackup"
