@@ -42,9 +42,7 @@
   {% if not READTHEDOCS %}
     <link rel="stylesheet" href="{{ pathto('_static/' + style, 1) }}" type="text/css" />
   {% endif %}
-  
-  <link rel="stylesheet" href="{{ pathto('_static/pygments.css', 1) }}" type="text/css" />
-  
+
   {% for cssfile in css_files %}
     <link rel="stylesheet" href="{{ pathto(cssfile, 1) }}" type="text/css" />
   {% endfor %}
@@ -133,10 +131,7 @@
               toctree is empty. Skip building this for now.
             #}
             {% if 'singlehtml' not in builder %}
-              {% set global_toc = toctree(maxdepth=theme_navigation_depth|int,
-                                          collapse=theme_collapse_navigation|tobool,
-                                          includehidden=theme_includehidden|tobool,
-                                          titles_only=theme_titles_only|tobool) %}
+              {% set global_toc = toctree(maxdepth=theme_navigation_depth|int, collapse=theme_collapse_navigation, includehidden=theme_includehidden) %}
             {% endif %}
             {% if global_toc %}
               {{ global_toc }}
@@ -162,11 +157,7 @@
 
       {# PAGE CONTENT #}
       <div class="wy-nav-content">
-        {% if theme_style_external_links|tobool %}
-        <div class="rst-content style-external-links">
-        {% else %}
         <div class="rst-content">
-        {% endif %}
           {% include "breadcrumbs.html" %}
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
@@ -209,15 +200,14 @@
     <script type="text/javascript" src="{{ pathto('_static/js/theme.js', 1) }}"></script>
   {% endif %}
 
+  {# STICKY NAVIGATION #}
+  {% if theme_sticky_navigation %}
   <script type="text/javascript">
       jQuery(function () {
-          {% if theme_sticky_navigation|tobool %}
-          SphinxRtdTheme.Navigation.enableSticky();
-          {% else %}
-          SphinxRtdTheme.Navigation.enable();
-          {% endif %}
+          SphinxRtdTheme.StickyNav.enable();
       });
   </script>
+  {% endif %}
 
   {%- block footer %} {% endblock %}
 

@@ -16,48 +16,33 @@ function ThemeNav () {
         isRunning: false
     };
 
-    nav.enable = function (withStickyNav) {
+    nav.enable = function () {
         var self = this;
 
-        if (self.isRunning) {
-            // Only allow enabling nav logic once
-            return;
-        }
+        if (!self.isRunning) {
+            self.isRunning = true;
+            jQuery(function ($) {
+                self.init($);
 
-        self.isRunning = true;
-        jQuery(function ($) {
-            self.init($);
+                self.reset();
+                self.win.on('hashchange', self.reset);
 
-            self.reset();
-            self.win.on('hashchange', self.reset);
-
-            if (withStickyNav) {
                 // Set scroll monitor
                 self.win.on('scroll', function () {
                     if (!self.linkScroll) {
-                        if (!self.winScroll) {
-                            self.winScroll = true;
-                            requestAnimationFrame(function() { self.onScroll(); });
-                        }
+                        self.winScroll = true;
                     }
                 });
-            }
+                setInterval(function () { if (self.winScroll) self.onScroll(); }, 25);
 
-            // Set resize monitor
-            self.win.on('resize', function () {
-                if (!self.winResize) {
+                // Set resize monitor
+                self.win.on('resize', function () {
                     self.winResize = true;
-                    requestAnimationFrame(function() { self.onResize(); });
-                }
+                });
+                setInterval(function () { if (self.winResize) self.onResize(); }, 25);
+                self.onResize();
             });
-
-            self.onResize();
-        });
-
-    };
-
-    nav.enableSticky = function() {
-        this.enable(true);
+        };
     };
 
     nav.init = function ($) {
@@ -90,15 +75,8 @@ function ThemeNav () {
             })
 
         // Make tables responsive
-        $("table.docutils:not(.field-list,.footnote,.citation)")
+        $("table.docutils:not(.field-list)")
             .wrap("<div class='wy-table-responsive'></div>");
-
-        // Add extra class to responsive tables that contain
-        // footnotes or citations so that we can target them for styling
-        $("table.docutils.footnote")
-            .wrap("<div class='wy-table-responsive footnote'></div>");
-        $("table.docutils.citation")
-            .wrap("<div class='wy-table-responsive citation'></div>");
 
         // Add expand links to all parents of nested ul
         $('.wy-menu-vertical ul').not('.simple').siblings('a').each(function () {
@@ -187,37 +165,7 @@ function ThemeNav () {
 module.exports.ThemeNav = ThemeNav();
 
 if (typeof(window) != 'undefined') {
-    window.SphinxRtdTheme = { Navigation: module.exports.ThemeNav };
+    window.SphinxRtdTheme = { StickyNav: module.exports.ThemeNav };
 }
-
-
-// requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
-// https://gist.github.com/paulirish/1579671
-// MIT license
-
-(function() {
-    var lastTime = 0;
-    var vendors = ['ms', 'moz', 'webkit', 'o'];
-    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
-                                   || window[vendors[x]+'CancelRequestAnimationFrame'];
-    }
-
-    if (!window.requestAnimationFrame)
-        window.requestAnimationFrame = function(callback, element) {
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-              timeToCall);
-            lastTime = currTime + timeToCall;
-            return id;
-        };
-
-    if (!window.cancelAnimationFrame)
-        window.cancelAnimationFrame = function(id) {
-            clearTimeout(id);
-        };
-}());
 
 },{"jquery":"jquery"}]},{},["sphinx-rtd-theme"]);
