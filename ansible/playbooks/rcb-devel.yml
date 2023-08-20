@@ -5,6 +5,7 @@
   become_method: sudo
 
   vars:
+
     bin_dir: /root/bin
     bin_items: {}
     source_path: /scratch/rcb/ # If rcb is a symbolic link trailing slash is needed

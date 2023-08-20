@@ -7,7 +7,7 @@
   become_method: sudo
 
   vars_files:
-        - ~/.ansible/vars/rcb-backup-server.yml
+    - ~/.ansible/vars/rcb-backup-server.yml
 
 #  vars:
 #    rcb_bck_shell: /bin/bash
@@ -24,12 +24,12 @@
         name: "{{ rcb_bck_user }}"
         shell: "{{ rcb_bck_shell }}"
       register: rcbuser
-      
+
     - name: "Create directory for encrypted backups {{ rcb_bck_dst }}"
       ansible.builtin.file:
         state: directory
         path: "{{ rcb_bck_dst }}"
-      
+
     - name: "Change owner and permissions of {{ rcb_bck_dst }} to {{ rcb_bck_user }} 0700"
       ansible.builtin.file:
         path: "{{ rcb_bck_dst }}"
@@ -47,7 +47,7 @@
              to {{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}"
       ansible.posix.authorized_key:
         user: "{{ rcb_bck_user }}"
-        key: "{{ lookup('file', '{{ item }}')}}"
+        key: "{{ lookup('file', '{{ item }}') }}"
       with_fileglob:
         - "{{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}/*.id_rsa.pub"
 
