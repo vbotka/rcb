@@ -7,9 +7,9 @@ The following sequence of commands copy, patch and install the scripts.
 
 .. code-block:: bash
 
-  > ansible-playbook ~/.ansible/playbooks/rcb-devel.yml
-  > ansible-playbook ~/.ansible/playbooks/rcb.yml -t rcb_patch
-  > ansible-playbook ~/.ansible/playbooks/rcb.yml -t rcb_copy
+  shell> ansible-playbook rcb-devel.yml
+  shell> ansible-playbook rcb.yml -t rcb_patch
+  shell> ansible-playbook rcb.yml -t rcb_copy
 
 
 Testing
@@ -19,5 +19,4 @@ The scripts can be tested.
 
 .. code-block:: bash
 
-  > ansible-playbook ~/.ansible/playbooks/rcb.yml -t testall
-
+  shell> ansible-playbook rcb.yml -t testall

@@ -1,9 +1,10 @@
 # defaults
 
-rcb_root_public_keys_dir: "/tmp"
+rcb_bck_shell: /bin/bash
 
-rcb_BCK_SHELL: "/bin/bash"
-rcb_BCK_USER: "rcbackup"
-rcb_BCK_GROUP: "rcbackup"
-rcb_BCK_DST: "/scratch/rcb"
-# BCK_DST will be replaced with rcb_BCK_DST/ansible_hostname
+rcb_bck_dst: /scratch/rcb
+rcb_root_public_keys_dir: /tmp
+
+# rcb_bck_user: rcbackup
+# rcb_bck_group: rcbackup
+# The config parameter BCK_DST will be replaced by rcb_BCK_DST/ansible_hostname
