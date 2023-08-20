@@ -1,21 +1,17 @@
 ---
 
-- hosts: backup.example.com
-  connection: ssh
+- hosts: rcb_server
   become: true
   become_user: root
   become_method: sudo
 
-  vars_files:
-    - ~/.ansible/vars/rcb-backup-server.yml
+  vars:
 
-#  vars:
-#    rcb_bck_shell: /bin/bash
-#    rcb_bck_dst: /scratch/rcb
-#    rcb_bck_user: rcbackup
-#    rcb_bck_group: rcbackup
-#
-# Config parameter BCK_DST will be replaced by rcb_BCK_DST/ansible_hostname
+    rcb_root_public_keys_dir: copy/rcb-root-ssh-pub-keys
+    rcb_bck_dst: /export/rcbackup
+    rcb_bck_shell: /usr/local/bin/bash
+    rcb_bck_user: rcbackup
+    rcb_bck_group: rcbackup
 
   tasks:
 
@@ -40,16 +36,13 @@
     - name: "Debug Public keys"
       ansible.builtin.debug:
         msg: "Public key {{ item }}"
-      with_fileglob:
-        - "/tmp/{{ inventory_hostname }}/*.id_rsa.pub"
+      with_fileglob: "{{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}/*.id_rsa.pub"
 
-    - name: "Set up authorized_keys for {{ rcb_bck_user }}
-             to {{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}"
+    - name: "Set up authorized_keys for {{ rcb_bck_user }}}"
       ansible.posix.authorized_key:
         user: "{{ rcb_bck_user }}"
-        key: "{{ lookup('file', '{{ item }}') }}"
-      with_fileglob:
-        - "{{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}/*.id_rsa.pub"
+        key: "{{ lookup('file', item) }}"
+      with_fileglob: "{{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}/*.id_rsa.pub"
 
 # EOF
 ...

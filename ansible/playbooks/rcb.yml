@@ -1,13 +1,20 @@
 ---
 
-- hosts: localhost
-  connection: local
+- hosts: rcb_clients
   become: true
   become_user: root
   become_method: sudo
 
-  vars_files:
-    - ~/.ansible/vars/rcb.yml
+  vars:
+
+    rcb_root_public_keys_dir: copy/rcb-root-ssh-pub-keys
+    rcb_bck_host: 10.1.0.10
+    rcb_bck_dst: /export/rcbackup
+    rcb_rcb_bck_root: /export/backup
+    rcb_rsyncrypto_trim_e: 4
+    rcb_rsyncrypto_trim_d: 3
+    rcb_rcb_rst_root: /export/restore
+    rcb_rcb_crt_root: /root/rcb/cert
 
   roles:
     - vbotka.rcb

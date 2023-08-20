@@ -1,0 +1,15 @@
+[rcb_clients]
+10.1.0.12
+
+[rcb_clients:vars]
+ansible_connection=ssh
+ansible_user=admin
+ansible_python_interpreter=/usr/bin/python3.10
+
+[rcb_server]
+10.1.0.10
+
+[rcb_server:vars]
+ansible_connection=ssh
+ansible_user=admin
+ansible_python_interpreter=/usr/local/bin/python3.8

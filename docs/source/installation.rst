@@ -5,7 +5,7 @@ Installation with Ansible
 -------------------------
 
 
-1) Install Ansible role
+1) Install Ansible role `vbotka.rcb <https://galaxy.ansible.com/vbotka/rcb/>`_
 
 .. code-block:: bash
 
