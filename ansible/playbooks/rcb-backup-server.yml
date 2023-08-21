@@ -9,9 +9,9 @@
 
     rcb_root_public_keys_dir: copy/rcb-root-ssh-pub-keys
     rcb_bck_dst: /export/rcbackup
-    rcb_bck_shell: /usr/local/bin/bash
     rcb_bck_user: rcbackup
     rcb_bck_group: rcbackup
+    rcb_bck_shell: /usr/local/bin/bash
 
   tasks:
 

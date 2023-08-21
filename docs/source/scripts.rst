@@ -57,13 +57,13 @@ Running the script with -l will symlink $RCB_ENC to $RCB_ENCR.
   where:
     -h --help     show this help text
     -l --link     links the origin directory instead of rsync
-    -d --delete   delete the destination defore rsync"
+    -d --delete   delete the destination before rsync"
 
 
 `rcb-decrypt.sh <https://github.com/vbotka/rcb/blob/master/rcb-decrypt.sh>`_
 ------------------------------------------------------------------------------
 
-Dencrypt data from SRC to DST, defined as follows
+Decrypt data from SRC to DST, defined as follows
 
 .. code-block:: bash
 

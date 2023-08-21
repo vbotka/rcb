@@ -15,4 +15,4 @@ Installation and configuration was tested with Ansible role `vbotka.rcb <https:/
 
 .. note::
 
-   * Use Ansible role `vbotka.rsnapshot <https://galaxy.ansible.com/vbotka/rsnapshot/>`_ to install and configure *rsnapshot* at the clients.
+   * Use Ansible role `vbotka.rsnapshot <https://galaxy.ansible.com/vbotka/rsnapshot/>`_ to install and configure *rsnapshot* on the clients.

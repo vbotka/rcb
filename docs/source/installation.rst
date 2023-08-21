@@ -12,50 +12,81 @@ Installation with Ansible
   shell> ansible-galaxy install vbotka.rcb
 
    
-2) Configure variables
+2) Download the example of an Ansible project
 
-Examples of playbooks and variables are available at `RCB <https://github.com/vbotka/rcb/tree/master/ansible>`_. The Ansible playbooks expect the content is downloaded to the directory `~/.ansible`
+Download the examples of the Ansible `playbooks, inventory and configuration <https://github.com/vbotka/rcb/tree/master/ansible>`_
 
 .. code-block:: bash
 
-  shell> pwd
-  /home/admin/.ansible
-
   shell> tree .
-  .
+  ├── ansible.cfg
   ├── hosts
-  ├── playbooks
-  │   ├── rcb-backup-server.yml
-  │   ├── rcb-devel.yml
-  │   └── rcb.yml
-  └── vars
-      ├── rcb-backup-server.yml
-          └── rcb.yml
+  ├── rcb-backup-server.yml
+  ├── rcb-devel.yml
+  └── rcb.yml
 
 
-Edit and change at least following variables
+3) Configure the project
 
-* vars/rcb-backup-server.yml
-  
+* In the the configuration file *ansible.cfg* change *roles_path* to
+  where you installed the role *vbotka.rcb*
+
+.. code-block:: bash
+
+  shell> cat ansible.cfg 
+  [defaults]
+  inventory = $PWD/hosts
+  roles_path = $HOME/.ansible/roles
+  stdout_callback = yaml
+
+
+* There are two groups in the inventory *hosts*. To test the project,
+  there is only one host in each group. Later you might want add more
+  clients and, optionally, more servers. Fit the hosts and the
+  variables to your needs
+
+.. code-block:: bash
+
+  shell> cat hosts
+  [rcb_clients]
+  10.1.0.12
+
+  [rcb_clients:vars]
+  ansible_connection=ssh
+  ansible_user=admin
+  ansible_python_interpreter=/usr/bin/python3.10
+
+  [rcb_server]
+  10.1.0.10
+
+  [rcb_server:vars]
+  ansible_connection=ssh
+  ansible_user=admin
+  ansible_python_interpreter=/usr/local/bin/python3.8
+
+* In the playbook *rcb.yml* which will configure the clients, edit and
+  change at least following variables:
+
+  * rcb_bck_host; The backup server.
+  * rcb_bck_dst; The directory at the backup server to store the backups.
+  * rcb_root_public_keys_dir; The directory at the Ansible controller
+    to store the public keys of the clients.
+  * rcb_rcb_bck_root; The directory at the client which will be
+    synchronized to *rcb_bck_dst*
+  * rcb_rcb_rst_root; The directory at the client where the backup
+    from the server will be eventually restored.
+
+* In the playbook *rcb-backup-server.yml* which will configure the
+  server, edit and change at least following variables:
+
   * rcb_bck_dst
-
-* vars/rcb.yml
-
-  * rcb_bck_host
-  * rcb_bck_dst
-  * rcb_cert_cn
-  * rcb_privatekey_passphrase
-    
-* playbooks/rcb-backup-server.yml
-
-  * hosts
-
-* playbooks/rcb.yml
-
-  * hosts
+  * rcb_root_public_keys_dir
+  * rcb_bck_user; The owner of the directory *rcb_bck_dst*
+  * rcb_bck_group; The group of the directory *rcb_bck_dst*
+  * rcb_bck_shell; The login shell of *rcb_bck_user*
 
   
-3) Run Ansible playbooks
+4) Run Ansible playbooks
 
 Following workflow was tested with Ubuntu(local Backup-Client) and FreeBSD (remote Backup-Server).
 
