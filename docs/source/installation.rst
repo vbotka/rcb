@@ -81,9 +81,13 @@ Download the examples of the Ansible `playbooks, inventory and configuration <ht
 
   * rcb_bck_dst
   * rcb_root_public_keys_dir
+  * rcb_bck_shell; The login shell of *rcb_bck_user*
+
+* If you change *rcb_bck_user* and *rcb_bck_group* (defaults=rcbackup)
+  do it in both playbooks
+
   * rcb_bck_user; The owner of the directory *rcb_bck_dst*
   * rcb_bck_group; The group of the directory *rcb_bck_dst*
-  * rcb_bck_shell; The login shell of *rcb_bck_user*
 
   
 4) Run Ansible playbooks
@@ -94,8 +98,8 @@ Following workflow was tested with Ubuntu (both localhost and
 a) Create root's SSH keys at *rcb_clients* and stores the public keys
    at the localhost directory `"{{ rcb_root_public_keys_dir }}/{{
    rcb_bck_host }}/root-{{ ansible_hostname }}.id_rsa.pub"`. root at
-   *rcb_clients* will be authorized to ssh to
-   *rcb_bck_user@rcb_bck_host*
+   hosts of the inventory froup *rcb_clients* will be authorized to
+   ssh to `"{{ rcb_bck_user }}@{{ rcb_bck_host }}"`
 
 .. code-block:: bash
 
