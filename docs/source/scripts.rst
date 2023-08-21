@@ -5,11 +5,11 @@ Scripts
 `rcb-rsnapshot.sh <https://github.com/vbotka/rcb/blob/master/rcb-rsnapshot.sh>`_
 --------------------------------------------------------------------------------
 
-Run rsnapshot.
+Run rsnapshot
 
 .. code-block:: bash
 
-  > /root/bin/rcb-rsnapshot.sh
+  shell> /root/bin/rcb-rsnapshot.sh
   rcb-rsnapshot.sh [-h|--help] [-i|--increment=[hourly,daily,weekly,monthly]] -- rsnapshot backup
   where:
       -h --help      show this help text
@@ -23,9 +23,9 @@ Run rsnapshot.
    
    2. Create directory $RCB_META/$REMOTE if it doesn't exist. REMOTE are the directories defined in BACKUP POINTS (3rd parameter) of rsnapshot.conf
 
-   3. Store lists of empty directories, links, special files and sockets in the directory $RCB_META/$REMOTE. Create digests in $RCB_META/$REMOTE/$RCB_DIGESTS.
+   3. Store lists of empty directories, links, special files and sockets in the directory $RCB_META/$REMOTE. Create digests in $RCB_META/$REMOTE/$RCB_DIGESTS
 
-   4. Encrypt $RCB_BCK_ROOT/$RCB_BCK_PREFIX to $RCB_ENC.
+   4. Encrypt $RCB_BCK_ROOT/$RCB_BCK_PREFIX to $RCB_ENC
 
 
 `rcb-rsync.sh <https://github.com/vbotka/rcb/blob/master/rcb-rsync.sh>`_
@@ -57,13 +57,13 @@ Running the script with -l will symlink $RCB_ENC to $RCB_ENCR.
   where:
     -h --help     show this help text
     -l --link     links the origin directory instead of rsync
-    -d --delete   delete the destination defore rsync"
+    -d --delete   delete the destination before rsync"
 
 
 `rcb-decrypt.sh <https://github.com/vbotka/rcb/blob/master/rcb-decrypt.sh>`_
 ------------------------------------------------------------------------------
 
-Dencrypt data from SRC to DST, defined as follows
+Decrypt data from SRC to DST, defined as follows
 
 .. code-block:: bash
 

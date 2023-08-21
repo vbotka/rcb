@@ -1,56 +1,48 @@
 ---
 
-- hosts: backup.example.com
-  connection: ssh
+- hosts: rcb_server
+  become: true
   become_user: root
-  become: yes
   become_method: sudo
 
-  # Variables
-  vars_files:
-        - ~/.ansible/vars/rcb-backup-server.yml
-#  vars:
-#    rcb_BCK_SHELL: "/bin/bash"
-#    rcb_BCK_USER: "rcbackup"
-#    rcb_BCK_GROUP: "rcbackup"
-#    rcb_BCK_DST: "/scratch/rcb"
-#
-# BCK_DST will be replaced with rcb_BCK_DST/ansible_hostname
+  vars:
 
-  # Tasks
+    rcb_root_public_keys_dir: copy/rcb-root-ssh-pub-keys
+    rcb_bck_dst: /export/rcbackup
+    rcb_bck_user: rcbackup
+    rcb_bck_group: rcbackup
+    rcb_bck_shell: /usr/local/bin/bash
+
   tasks:
-    - name: Create user "{{ rcb_BCK_USER }}"
-      user: >
-        name="{{ rcb_BCK_USER }}"
-        shell="{{ rcb_BCK_SHELL }}"
+
+    - name: "Create user {{ rcb_bck_user }}"
+      ansible.builtin.user:
+        name: "{{ rcb_bck_user }}"
+        shell: "{{ rcb_bck_shell }}"
       register: rcbuser
-      
-    - name: Create directory for encrypted backups
-      file: >
-        state="directory"
-        path="{{ item }}"
-        with_items:
-          - "{{ rcb_BCK_DST }}"
-      
-    - name: Change owner, group and permissions
-      file: >
-        path="{{ item }}"
-        owner="{{ rcb_BCK_USER }}"
-        group="{{ rcb_BCK_GROUP }}"
-        mode="0700"
-        with_items:
-          - "{{ rcb_BCK_DST }}"
 
-#    - debug: msg="Public key {{item}}"
-#      with_fileglob:
-#        - "/tmp/{{ inventory_hostname }}/*.id_rsa.pub"
+    - name: "Create directory for encrypted backups {{ rcb_bck_dst }}"
+      ansible.builtin.file:
+        state: directory
+        path: "{{ rcb_bck_dst }}"
 
-    - name: Set up authorized_keys for "{{ rcb_BCK_USER }}"
-      authorized_key: >
-        user="{{ rcb_BCK_USER }}"
-        key="{{ lookup('file', '{{ item }}')}}"
-      with_fileglob:
-        - "{{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}/*.id_rsa.pub"
+    - name: "Change owner and permissions of {{ rcb_bck_dst }} to {{ rcb_bck_user }} 0700"
+      ansible.builtin.file:
+        path: "{{ rcb_bck_dst }}"
+        owner: "{{ rcb_bck_user }}"
+        group: "{{ rcb_bck_group }}"
+        mode: '0700'
+
+    - name: "Debug Public keys"
+      ansible.builtin.debug:
+        msg: "Public key {{ item }}"
+      with_fileglob: "{{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}/*.id_rsa.pub"
+
+    - name: "Set up authorized_keys for {{ rcb_bck_user }}}"
+      ansible.posix.authorized_key:
+        user: "{{ rcb_bck_user }}"
+        key: "{{ lookup('file', item) }}"
+      with_fileglob: "{{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}/*.id_rsa.pub"
 
 # EOF
 ...

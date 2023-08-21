@@ -8,7 +8,7 @@ USAGE="$(basename "$0") [-h|--help] [-l|--link] [-d|--delete] -- rsync from back
 where:
     -h --help     show this help text
     -l --link     links the origin directory instead of rsync
-    -d --delete   delete the destination defore rsync"
+    -d --delete   delete the destination before rsync"
 
 LINK="false"
 DELETE="false"
