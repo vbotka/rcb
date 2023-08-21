@@ -9,7 +9,11 @@ Introduction
 * Restore the backup and
 * Compare the restored data with the origin
 
-`Rsyncrypto <https://rsyncrypto.lingnu.com/>`_ ensures that doing rsync to synchronize the encrypted files to another machine will have only a small impact on rsync's efficiency. Whole RCB project is approximately 500 lines long.
+All updates and transfers are incremental. `rsyncrypto
+<https://rsyncrypto.lingnu.com/>`_ ensures that doing rsync to
+synchronize the encrypted files to another machine will have only a
+small impact on rsync's efficiency. Whole RCB project is approximately
+500 lines long.
 
 Installation and configuration was tested with Ansible role `vbotka.rcb <https://galaxy.ansible.com/vbotka/rcb/>`_ with FreeBSD backup server and Ubuntu backup clients.
 

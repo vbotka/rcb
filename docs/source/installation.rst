@@ -64,8 +64,8 @@ Download the examples of the Ansible `playbooks, inventory and configuration <ht
   ansible_user=admin
   ansible_python_interpreter=/usr/local/bin/python3.8
 
-* In the playbook *rcb.yml* which will configure the clients, edit and
-  change at least following variables:
+* In the playbook *rcb.yml* which will configure the clients
+  *rcb_clients*, edit and change at least following variables:
 
   * rcb_bck_host; The backup server.
   * rcb_bck_dst; The directory at the backup server to store the backups.
@@ -88,15 +88,22 @@ Download the examples of the Ansible `playbooks, inventory and configuration <ht
   
 4) Run Ansible playbooks
 
-Following workflow was tested with Ubuntu(local Backup-Client) and FreeBSD (remote Backup-Server).
+Following workflow was tested with Ubuntu (both localhost and
+*rcb_clients*) and FreeBSD (remote *rcb_server*).
 
-a) Create SSH keys at Backup-Clients and stores the public keys at the localhost
+a) Create root's SSH keys at *rcb_clients* and stores the public keys
+   at the localhost directory `"{{ rcb_root_public_keys_dir }}/{{
+   rcb_bck_host }}/root-{{ ansible_hostname }}.id_rsa.pub"`. root at
+   *rcb_clients* will be authorized to ssh to
+   *rcb_bck_user@rcb_bck_host*
 
 .. code-block:: bash
 
   shell> ansible-playbook rcb.yml -t phase1
 
-b) Configure the ssh access of Backup-Clients to Backup-Server. Store the public keys of Backup-Clients, created in phase1, into the ~/rcb_bck_user/.ssh/authorized_keys
+b) Configure the ssh access of *rcb_clients* to *rcb_server*. Put the
+   root's public keys of *rcb_clients*, created in phase1, into the
+   *~/.ssh/authorized_keys* of *rcb_bck_user*
 
 .. code-block:: bash
 
