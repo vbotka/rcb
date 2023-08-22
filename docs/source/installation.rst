@@ -89,17 +89,23 @@ Download the examples of the Ansible `playbooks, inventory and configuration <ht
   * rcb_bck_user; The owner of the directory *rcb_bck_dst*
   * rcb_bck_group; The group of the directory *rcb_bck_dst*
 
+.. note:: The variable *ansible_hostname* is needed to configure
+          *rcb_clients*. Either enable `DEFAULT_GATHERING
+          <https://docs.ansible.com/ansible/latest/reference_appendices/config.html#default-gathering>`_
+          or set the variable manually.
+
   
 4) Run Ansible playbooks
 
 Following workflow was tested with Ubuntu (both localhost and
 *rcb_clients*) and FreeBSD (remote *rcb_server*).
 
-a) Create root's SSH keys at *rcb_clients* and stores the public keys
-   at the localhost directory `"{{ rcb_root_public_keys_dir }}/{{
-   rcb_bck_host }}/root-{{ ansible_hostname }}.id_rsa.pub"`. root at
-   hosts of the inventory froup *rcb_clients* will be authorized to
-   ssh to `"{{ rcb_bck_user }}@{{ rcb_bck_host }}"`
+a) Create root's SSH keys on the hosts from the inventory group
+   *rcb_clients* and store the public keys on the localhost in the
+   directory `"{{ rcb_root_public_keys_dir }}/{{ rcb_bck_host
+   }}/root-{{ ansible_hostname }}.id_rsa.pub"`. root on the hosts from
+   the inventory group *rcb_clients* will be authorized to ssh to `"{{
+   rcb_bck_user }}@{{ rcb_bck_host }}"`
 
 .. code-block:: bash
 
@@ -107,7 +113,8 @@ a) Create root's SSH keys at *rcb_clients* and stores the public keys
 
 b) Configure the ssh access of *rcb_clients* to *rcb_server*. Put the
    root's public keys of *rcb_clients*, created in phase1, into the
-   *~/.ssh/authorized_keys* of *rcb_bck_user*
+   *~/.ssh/authorized_keys* of *rcb_bck_user* on the host(s) from the
+   inventory group *rcb_server*.
 
 .. code-block:: bash
 
