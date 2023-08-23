@@ -1,0 +1,96 @@
+
+PLAY [rcb_clients] *************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [10.1.0.12]
+
+TASK [vbotka.rcb : vars: Set variables for al_include_os_vars_path] ************
+ok: [10.1.0.12]
+
+TASK [vars: Include OS vars] ***************************************************
+
+TASK [vbotka.ansible_lib : al_include_os_vars_path: Debug] *********************
+skipping: [10.1.0.12]
+
+TASK [vbotka.ansible_lib : al_include_os_vars_path: End of play when al_os_vars_path not defined] ***
+skipping: [10.1.0.12]
+
+TASK [vbotka.ansible_lib : al_include_os_vars_path: Vars from /export/home/admin.config/.ansible/roles/vbotka.rcb/vars/defaults] ***
+ok: [10.1.0.12]
+
+TASK [vbotka.ansible_lib : al_include_os_vars_path: Debug result] **************
+skipping: [10.1.0.12]
+
+TASK [vbotka.ansible_lib : al_include_os_vars_path: Vars from /export/home/admin.config/.ansible/roles/vbotka.rcb/vars] ***
+ok: [10.1.0.12]
+
+TASK [vbotka.rcb : debug: RCB] *************************************************
+ok: [10.1.0.12] => 
+  msg: |-
+    ansible_architecture: x86_64
+    ansible_os_family: Debian
+    ansible_distribution: Ubuntu
+    ansible_distribution_major_version: 22
+    ansible_distribution_version: 22.04
+    ansible_distribution_release: jammy
+    ansible_python_version: 3.10.12
+    ansible_hostname: rcb_client_01.example.org
+  
+    rcb_test: False
+    rcb_apt_update_cache: True
+    ubuntu_cache_valid_time: 14400
+    rcb_install: True
+    rcb_packages:
+      - bash
+      - git
+      - hashdeep
+      - rsnapshot
+      - rsyncrypto
+      - mtree-netbsd
+      - bsd-mailx
+  
+    rcb_source_version: 1.1.0
+    rcb_source_ignore_current_lock: False
+    rcb_source_file: 1.1.0.tar.gz
+    rcb_source_dir: rcb-1.1.0
+    rcb_source_dest: /usr/local/src
+    rcb_source_url: https://github.com/vbotka/rcb/archive
+  
+    rcb_root_public_keys_dir: copy/rcb-root-ssh-pub-keys
+    rcb_bin_dir: /root/bin
+    rcb_etc_dir: /usr/local/etc
+    rcb_snapshot_root: /scratch/rcb/backup/snapshots
+  
+    rcb_conf: rcb.conf
+    rcb_rsnapshot_conf: rsnapshot.conf
+    rcb_backup_conf: False
+    rcb_rcb_email: root
+    rcb_rcb_bck_root: /export/backup
+    rcb_rcb_bck_prefix: snapshots/hourly.0
+    rcb_rsyncrypto_trim_e: 4
+    rcb_rsyncrypto_trim_d: 3
+    rcb_rcb_rst_root: /export/restore
+    rcb_rcb_crt_root: /root/rcb/cert
+  
+    rcb_cert_cn: rcb_client_01.example.org
+    rcb_privatekey_cipher: AES-256-CBC
+    rcb_privatekey_passphrase_file: /root/rcb/cert/pem-pass-phrase
+    rcb_privatekey_passphrase_owner: root
+    rcb_privatekey_passphrase_group: admin
+    rcb_privatekey_passphrase_mode: 0640
+    rcb_bck_host: 10.1.0.10
+    rcb_bck_user: rcbackup
+    rcb_bck_group: rcbackup
+    rcb_bck_dst: /export/rcbackup
+    rcb_link_restore: True
+  
+    rcb_rsnapshot_cron: False
+    rcb_rsnapshot_cron_user: root
+    rcb_rsnapshot_cron_path: /root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    rcb_rsnapshot_cron_mailto : root
+  
+    rcb_privatekey_passphrase: my secret passphrase
+
+PLAY RECAP *********************************************************************
+10.1.0.12: ok=5    changed=0    unreachable=0    failed=0    skipped=3    rescued=0    ignored=0   
+

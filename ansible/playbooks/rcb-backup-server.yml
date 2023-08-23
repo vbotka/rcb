@@ -9,9 +9,9 @@
 
     rcb_root_public_keys_dir: copy/rcb-root-ssh-pub-keys
     rcb_bck_dst: /export/rcbackup
+    rcb_bck_shell: /usr/local/bin/bash
     rcb_bck_user: rcbackup
     rcb_bck_group: rcbackup
-    rcb_bck_shell: /usr/local/bin/bash
 
   tasks:
 
@@ -25,18 +25,15 @@
       ansible.builtin.file:
         state: directory
         path: "{{ rcb_bck_dst }}"
-
-    - name: "Change owner and permissions of {{ rcb_bck_dst }} to {{ rcb_bck_user }} 0700"
-      ansible.builtin.file:
-        path: "{{ rcb_bck_dst }}"
         owner: "{{ rcb_bck_user }}"
         group: "{{ rcb_bck_group }}"
         mode: '0700'
 
-    - name: "Debug Public keys"
+    - name: "Debug public keys"
       ansible.builtin.debug:
         msg: "Public key {{ item }}"
       with_fileglob: "{{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}/*.id_rsa.pub"
+      when: debug|d(false)|bool
 
     - name: "Set up authorized_keys for {{ rcb_bck_user }}}"
       ansible.posix.authorized_key:

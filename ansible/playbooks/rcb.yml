@@ -5,6 +5,9 @@
   become_user: root
   become_method: sudo
 
+  vars_files:
+    - rcb_privatekey_passphrase.yml
+
   vars:
 
     rcb_bck_host: 10.1.0.10
@@ -13,8 +16,7 @@
     rcb_rcb_bck_root: /export/backup
     rcb_rcb_rst_root: /export/restore
     rcb_rcb_crt_root: /root/rcb/cert
-    rcb_rsyncrypto_trim_e: 4
-    rcb_rsyncrypto_trim_d: 3
+    rcb_cert_cn: rcb_client_01.example.org
 
   roles:
     - vbotka.rcb
