@@ -1,6 +1,5 @@
-Configure cron
-==============
-
+cron
+====
 
 
 1. Use Ansible role `vbotka.rcb <https://galaxy.ansible.com/vbotka/rcb/>`_

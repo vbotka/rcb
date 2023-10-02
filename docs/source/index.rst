@@ -11,12 +11,12 @@ source: https://github.com/vbotka/rcb
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Table of Contents
 
    introduction
    installation
-   rsnapshot
+   test
    cron
    scripts
    development

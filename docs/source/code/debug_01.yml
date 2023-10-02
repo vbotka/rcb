@@ -1,30 +1,31 @@
+shell> ansible-playbook rcb.yml -t rcb_debug -e rcb_debug=true -e rcb_debug_classified=true
 
-PLAY [rcb_clients] *************************************************************
+PLAY [10.1.0.12] *********************************************************************************
 
-TASK [Gathering Facts] *********************************************************
+TASK [Gathering Facts] ***********************************************************************
 ok: [10.1.0.12]
 
-TASK [vbotka.rcb : vars: Set variables for al_include_os_vars_path] ************
+TASK [vbotka.rcb : vars: Set variables for al_include_os_vars_path] **************************
 ok: [10.1.0.12]
 
-TASK [vars: Include OS vars] ***************************************************
+TASK [vars: Include OS vars] *****************************************************************
 
-TASK [vbotka.ansible_lib : al_include_os_vars_path: Debug] *********************
+TASK [vbotka.ansible_lib : al_include_os_vars_path: Debug] ***********************************
 skipping: [10.1.0.12]
 
 TASK [vbotka.ansible_lib : al_include_os_vars_path: End of play when al_os_vars_path not defined] ***
 skipping: [10.1.0.12]
 
-TASK [vbotka.ansible_lib : al_include_os_vars_path: Vars from /export/home/admin.config/.ansible/roles/vbotka.rcb/vars/defaults] ***
+TASK [vbotka.ansible_lib : al_include_os_vars_path: Vars from /home/admin/.ansible/roles/vbotka.rcb/vars/defaults] ***
 ok: [10.1.0.12]
 
-TASK [vbotka.ansible_lib : al_include_os_vars_path: Debug result] **************
+TASK [vbotka.ansible_lib : al_include_os_vars_path: Debug result] ****************************
 skipping: [10.1.0.12]
 
-TASK [vbotka.ansible_lib : al_include_os_vars_path: Vars from /export/home/admin.config/.ansible/roles/vbotka.rcb/vars] ***
+TASK [vbotka.ansible_lib : al_include_os_vars_path: Vars from /home/admin/.ansible/roles/vbotka.rcb/vars] ***
 ok: [10.1.0.12]
 
-TASK [vbotka.rcb : debug: RCB] *************************************************
+TASK [vbotka.rcb : debug: RCB] ***************************************************************
 ok: [10.1.0.12] => 
   msg: |-
     ansible_architecture: x86_64
@@ -36,8 +37,7 @@ ok: [10.1.0.12] =>
     ansible_python_version: 3.10.12
     ansible_hostname: rcb_client_01.example.org
   
-    rcb_test: False
-    rcb_apt_update_cache: True
+    rcb_apt_update_cache: False
     ubuntu_cache_valid_time: 14400
     rcb_install: True
     rcb_packages:
@@ -49,17 +49,16 @@ ok: [10.1.0.12] =>
       - mtree-netbsd
       - bsd-mailx
   
-    rcb_source_version: 1.1.0
+    rcb_source_version: 1.1.2
     rcb_source_ignore_current_lock: False
-    rcb_source_file: 1.1.0.tar.gz
-    rcb_source_dir: rcb-1.1.0
+    rcb_source_file: 1.1.2.tar.gz
+    rcb_source_dir: rcb-1.1.2
     rcb_source_dest: /usr/local/src
     rcb_source_url: https://github.com/vbotka/rcb/archive
   
     rcb_root_public_keys_dir: copy/rcb-root-ssh-pub-keys
     rcb_bin_dir: /root/bin
     rcb_etc_dir: /usr/local/etc
-    rcb_snapshot_root: /scratch/rcb/backup/snapshots
   
     rcb_conf: rcb.conf
     rcb_rsnapshot_conf: rsnapshot.conf
@@ -72,8 +71,14 @@ ok: [10.1.0.12] =>
     rcb_rcb_rst_root: /export/restore
     rcb_rcb_crt_root: /root/rcb/cert
   
+    rcb_test: False
+    rcb_conf_test: rcb-test.conf
+    rcb_rsnapshot_conf_test: rsnapshot-test.conf
+    rcb_bck_dst_test: /export/rcbackup-test
+    rcb_rcb_bck_prefix_test: snapshots-test/hourly.0
+
     rcb_cert_cn: rcb_client_01.example.org
-    rcb_privatekey_cipher: AES-256-CBC
+    rcb_privatekey_cipher: auto
     rcb_privatekey_passphrase_file: /root/rcb/cert/pem-pass-phrase
     rcb_privatekey_passphrase_owner: root
     rcb_privatekey_passphrase_group: admin
@@ -84,13 +89,12 @@ ok: [10.1.0.12] =>
     rcb_bck_dst: /export/rcbackup
     rcb_link_restore: True
   
-    rcb_rsnapshot_cron: False
+    rcb_rsnapshot_cron: True
     rcb_rsnapshot_cron_user: root
     rcb_rsnapshot_cron_path: /root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     rcb_rsnapshot_cron_mailto : root
   
     rcb_privatekey_passphrase: my secret passphrase
 
-PLAY RECAP *********************************************************************
-10.1.0.12: ok=5    changed=0    unreachable=0    failed=0    skipped=3    rescued=0    ignored=0   
-
+PLAY RECAP ***********************************************************************************
+10.1.0.12: ok=5    changed=0    unreachable=0    failed=0    skipped=3    rescued=0    ignored=0

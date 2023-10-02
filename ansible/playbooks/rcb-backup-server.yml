@@ -9,9 +9,10 @@
 
     rcb_root_public_keys_dir: copy/rcb-root-ssh-pub-keys
     rcb_bck_dst: /export/rcbackup
-    rcb_bck_shell: /usr/local/bin/bash
+    rcb_bck_dst_test: /export/rcbackup-test
     rcb_bck_user: rcbackup
     rcb_bck_group: rcbackup
+    rcb_bck_shell: /usr/local/bin/bash
 
   tasks:
 
@@ -21,25 +22,33 @@
         shell: "{{ rcb_bck_shell }}"
       register: rcbuser
 
-    - name: "Create directory for encrypted backups {{ rcb_bck_dst }}"
+    - name: "Create directories"
       ansible.builtin.file:
         state: directory
-        path: "{{ rcb_bck_dst }}"
+        path: "{{ item }}"
         owner: "{{ rcb_bck_user }}"
         group: "{{ rcb_bck_group }}"
         mode: '0700'
+      loop:
+        - "{{ rcb_bck_dst }}"
+        - "{{ rcb_bck_dst_test }}"
 
-    - name: "Debug public keys"
+    - name: "Debug Public keys"
       ansible.builtin.debug:
         msg: "Public key {{ item }}"
       with_fileglob: "{{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}/*.id_rsa.pub"
+      loop_control:
+        label: "{{ item|basename }}"
       when: debug|d(false)|bool
 
-    - name: "Set up authorized_keys for {{ rcb_bck_user }}}"
+    - name: "Set up authorized_keys for {{ rcb_bck_user }}
+             to {{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}"
       ansible.posix.authorized_key:
         user: "{{ rcb_bck_user }}"
-        key: "{{ lookup('file', item) }}"
+        key: "{{ lookup('file', '{{ item }}')}}"
       with_fileglob: "{{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}/*.id_rsa.pub"
+      loop_control:
+        label: "{{ item|basename }}"
 
 # EOF
 ...
