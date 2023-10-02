@@ -16,13 +16,3 @@ The following sequence of commands copy, patch and install the scripts.
   shell> ansible-playbook rcb-devel.yml
   shell> ansible-playbook rcb.yml -t rcb_patch
   shell> ansible-playbook rcb.yml -t rcb_copy
-
-
-Testing
-=======
-
-The scripts can be tested.
-
-.. code-block:: bash
-
-  shell> ansible-playbook rcb.yml -t testall

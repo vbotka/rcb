@@ -12,6 +12,7 @@
 
     rcb_bck_host: 10.1.0.10
     rcb_bck_dst: /export/rcbackup
+    rcb_bck_dst_test: /export/rcbackup-test
     rcb_root_public_keys_dir: copy/rcb-root-ssh-pub-keys
     rcb_rcb_bck_root: /export/backup
     rcb_rcb_rst_root: /export/restore
