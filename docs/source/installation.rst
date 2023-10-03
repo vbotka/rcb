@@ -8,16 +8,16 @@ Installation with Ansible
 
 Two roles are used to install the project:
 
-* vbotka.rcb
-* vbotka.rsnapshot
+* :l:`vbotka.rcb`
+* :l:`vbotka.rsnapshot`
 
 
 Required collections
 ^^^^^^^^^^^^^^^^^^^^
 
-The roles **vbotka.rcb** and **vbotka.rsnapshot** require collection
-**community.general**. In addition to this, **vbotka.rcb** requires
-also **community.crypto**. These collections should be included in
+The roles :l:`vbotka.rcb` and :l:`vbotka.rsnapshot` require collection
+:l:`community.general`. In addition to this, :l:`vbotka.rcb` requires
+also :l:`community.crypto`. These collections should be included in
 standard Ansible packages. If they are not or if you want to use the
 latest versions install them
 
@@ -30,7 +30,8 @@ latest versions install them
 Install rsnapshot
 ^^^^^^^^^^^^^^^^^
 
-Use Ansible role `vbotka.rsnapshot <https://galaxy.ansible.com/vbotka/rsnapshot/>`_ to install and configure *rsnapshot* on the clients.
+Use Ansible role :l:`vbotka.rsnapshot` to install and configure
+*rsnapshot* on the clients.
 
 .. code-block:: bash
 
@@ -38,6 +39,7 @@ Use Ansible role `vbotka.rsnapshot <https://galaxy.ansible.com/vbotka/rsnapshot/
 
 
 Create playbook
+"""""""""""""""
 
 .. code-block:: yaml
 
@@ -53,13 +55,25 @@ Create playbook
 Configure rsnapshot
 """""""""""""""""""
 
-<TBD>
+.. code-block:: yaml
+
+  rsnapshot_test: true
+  rsnapshot_no_create_root: '0'
+  rsnapshot_backup_points:
+    - {dir: /etc/, host: localhost/}
+    - {dir: /usr/local/etc/, host: localhost/}
+    - {dir: /var/backups/, host: localhost/}
+  rsnapshot_backup_points_test:
+    - {dir: /scratch/rcb-test/, host: localhost/}
+  rsnapshot_exclude:
+    - regex: '.git/'
+    - regex: '.#*'
 
 
 Install rcb
 ^^^^^^^^^^^
 
-Use Ansible roles `vbotka.rcb <https://galaxy.ansible.com/vbotka/rcb/>`_ and `vbotka.ansible_lib <https://galaxy.ansible.com/vbotka/ansible_lib/>`_
+Use Ansible roles :l:`vbotka.rcb` and :l:`vbotka.ansible_lib`
 
 .. code-block:: bash
 
@@ -85,7 +99,7 @@ Download the examples of the Ansible `playbooks, inventory and configuration <ht
 The playbooks **rcb.yml** and **rcb-backup-server.yml** configure the
 client(s) and the backup server(s) respectively. The playbook
 **rcb-devel.yml** is used in the development. The file
-**rcb_privatekey_passphrase.yml** keeps the passphrase. It's plaintext
+**rcb_privatekey_passphrase.yml** keeps the passphrase. It's plain-text
 for the purpose of testing. In production, you might want to encrypt
 it by `Ansible vault <https://docs.ansible.com/ansible/latest/vault_guide/index.html#protecting-sensitive-data-with-ansible-vault>`_
 or any other password management.
@@ -99,7 +113,7 @@ ansible.cfg
 """""""""""
 
 In the configuration file **ansible.cfg** change **roles_path** to
-where you installed the role **vbotka.rcb**
+where you installed the role :l:`vbotka.rcb`
 
 .. literalinclude:: ../../ansible/playbooks/ansible.cfg
   :language: ini
@@ -190,7 +204,7 @@ Include the file **rcb_privatekey_passphrase.yml** in the playbook
   * Self Signed Certificate **{{ rcb_rcb_crt_root }}/backup.crt**
 
 For later use, the passphrase will be stored in the file
-**{{ rcb_privatekey_passphrase_file }}** (default: {{ rcb_rcb_crt_root
+**{{ rcb_privatekey_passphrase_file }}** (default={{ rcb_rcb_crt_root
 }}/pem-pass-phrase).
 
 

@@ -20,16 +20,14 @@ installation on the clients. Each task runs one of the scripts:
 Configure test in rsnapshot
 ---------------------------
 
-If you enable *rsnapshot_test: true* the role :l:`vbotka.rsnapshot` in
+If you enable *rsnapshot_test=true* the role :l:`vbotka.rsnapshot` in
 Ubuntu creates the configuration file
 */usr/local/etc/rsnapshot-test.conf*. For the purpose of testing add
-*backup* point(s) and *snapshot_root* to this configuration file. For
-example,
+backup point *rsnapshot_backup_points_test*
 
 .. code-block:: yaml
 
   rsnapshot_test: true
-  rsnapshot_snapshot_root_test: /export/backup/snapshots-test
   rsnapshot_backup_points_test:
     - {dir: /scratch/rcb-test/, host: localhost/}
 
@@ -53,10 +51,13 @@ Display the variables
 
 .. note::
 
-  In the role :l:`vbotka.rsnapshot`, the path to the configuration for
-  testing is stored in the variable
-  *rsnapshot_config_file_test*. Because this path may vary among the
-  operating systems the defaults are stored in *vars/defaults*.
+  * In the role :l:`vbotka.rsnapshot`, the path to the configuration
+    for testing is stored in the variable
+    *rsnapshot_config_file_test*. Because this path may vary among the
+    operating systems the defaults are stored in *vars/defaults*.
+
+  * The default value of *rsnapshot_snapshot_root_test* is
+    */export/backup/snapshots-test*
 
 
 Create the directories for testing and the configuration file
@@ -154,7 +155,7 @@ Display the difference between *rcb-test.conf* and *rcb.conf*
 Run tests
 ---------
 
-By default the testing is disabled *rcb_test: false*.
+By default the testing is disabled *rcb_test=false*.
 
 
 test1: Create snapshot
