@@ -1,4 +1,4 @@
-shell> ansible-playbook rcb.yml -t rcb_debug -e rcb_debug=true -e rcb_debug_classified=true
+shell> ansible-playbook -t rcb_debug -e rcb_debug=true -e rcb_debug_classified=true rcb.yml
 
 PLAY [10.1.0.12] *********************************************************************************
 
