@@ -1,4 +1,3 @@
-
 Test
 ====
 
@@ -152,14 +151,14 @@ Display the difference between *rcb-test.conf* and *rcb.conf*
   > RSNAPSHOT_PARAM="-c /usr/local/etc/rsnapshot.conf"
 
 
-Run the tests
--------------
+Run tests
+---------
 
 By default the testing is disabled *rcb_test: false*.
 
 
-test1
-^^^^^
+test1: Create snapshot
+^^^^^^^^^^^^^^^^^^^^^^
 
 Enable testing and run the first test
 
@@ -181,8 +180,8 @@ Take a look at */var/log/rcb.log*::
    the file *tasks/test1.yml*.
 
 
-test2
-^^^^^
+test2: Encrypt snapshots
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Run the second test
 
@@ -208,8 +207,8 @@ Take a look at */var/log/rcb.log*::
   Mon 02 Oct 2023 09:36:35 PM CEST [OK] *** Encryption of /export/backup/snapshots-test/hourly.0 finished
 
 
-test3
-^^^^^
+test3: Rsync encrypted snaphosts to the backup server
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Run the third test
 
@@ -226,8 +225,8 @@ Take a look at */var/log/rcb.log*::
   Mon 02 Oct 2023 09:42:55 PM CEST [OK] *** Rsync from /export/backup/enc/ to rcbackup@10.1.0.10:/export/rcbackup-test/client finished
 
 
-test4
-^^^^^
+test4: Restore encrypted snapshots from the backup server
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Run the fourth test
 
@@ -243,8 +242,8 @@ Take a look at */var/log/rcb.log*::
   Mon 02 Oct 2023 10:06:14 PM CEST [OK] *** Rsync from rcbackup@10.1.0.10:/export/rcbackup-test/client/ to /export/backup/enc.restored finished
 
 
-test5
-^^^^^
+test5: Decrypt restored snapshots
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Run the fifth test
 
@@ -260,8 +259,8 @@ Take a look at */var/log/rcb.log*::
   Mon 02 Oct 2023 10:08:59 PM CEST [OK] *** Decryption from /export/backup/enc.restored to /export/backup/dec finished
 
 
-test6
-^^^^^
+test6: Restore data
+^^^^^^^^^^^^^^^^^^^
 
 Run the sixth test
 
@@ -281,8 +280,8 @@ Take a look at */var/log/rcb.log*::
   Mon 02 Oct 2023 10:09:41 PM CEST [OK] *** /export/backup/snapshots-test/hourly.0 restored in /export/restore
 
 
-testall
-^^^^^^^
+testall: Run all tests
+^^^^^^^^^^^^^^^^^^^^^^
 
 You can run all test in one play
 
