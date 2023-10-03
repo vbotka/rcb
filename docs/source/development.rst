@@ -10,5 +10,5 @@ The following sequence of commands copy, patch and install the scripts
 .. code-block:: bash
 
   shell> ansible-playbook rcb-devel.yml
-  shell> ansible-playbook rcb.yml -t rcb_patch
-  shell> ansible-playbook rcb.yml -t rcb_copy
+  shell> ansible-playbook -t rcb_patch rcb.yml
+  shell> ansible-playbook -t rcb_copy rcb.yml

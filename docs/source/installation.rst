@@ -240,7 +240,7 @@ group **rcb_clients** will be authorized to ssh to **{{ rcb_bck_user
 
 .. code-block:: bash
 
-  shell> ansible-playbook rcb.yml -t phase1
+  shell> ansible-playbook -t phase1 rcb.yml
 
 
 Configure server
@@ -263,4 +263,4 @@ phase2. Configure the clients
 
 .. code-block:: bash
 
-  shell> ansible-playbook rcb.yml -t phase2
+  shell> ansible-playbook -t phase2 rcb.yml
