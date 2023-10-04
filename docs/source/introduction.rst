@@ -17,15 +17,7 @@ is approximately 500 lines long.
 Installation and configuration was tested with Ansible role
 :l:`vbotka.rcb` with FreeBSD backup server and Ubuntu backup clients.
 
-.. note::
-
-   * Use Ansible role :l:`vbotka.rsnapshot` to install and configure
-     *rsnapshot* on the clients.
-
-   * :l:`rsync` must be installed on the clients and also on the
-     backup server.
-
-.. warning::
+.. important::
 
    :l:`rsyncrypto` summary: "A slightly reduced strength bulk
    encryption. In exchange for the reduced strength, you get the

@@ -2,7 +2,6 @@ Installation
 ============
 
 
-
 Installation with Ansible
 -------------------------
 
@@ -12,8 +11,22 @@ Two roles are used to install the project:
 * :l:`vbotka.rsnapshot`
 
 
-Required collections
-^^^^^^^^^^^^^^^^^^^^
+.. important::
+
+   * :l:`rsync` must be installed both on *rcb-clients* and *rcb-
+     server* (see *Inventory hosts* below).
+
+   * The roles :l:`vbotka.rcb` and :l:`vbotka.rsnapshot` configure
+     *rcb-clients* only
+
+   * On *rcb-clients*, :l:`rsync` will be installed by
+     :l:`vbotka.rsnapshot` as a requirement of :l:`rsnapshot`
+
+   * On the *rcb-server*, it's up to you to install :l:`rsync`
+
+
+1) Required collections
+^^^^^^^^^^^^^^^^^^^^^^^
 
 The roles :l:`vbotka.rcb` and :l:`vbotka.rsnapshot` require collection
 :l:`community.general`. In addition to this, :l:`vbotka.rcb` requires
@@ -27,8 +40,8 @@ latest versions install them
   shell> ansible-galaxy collections install community.general
 
 
-Install rsnapshot
-^^^^^^^^^^^^^^^^^
+2) Install rsnapshot
+^^^^^^^^^^^^^^^^^^^^
 
 Use Ansible role :l:`vbotka.rsnapshot` to install and configure
 *rsnapshot* on the clients.
@@ -70,8 +83,16 @@ Configure rsnapshot
     - regex: '.#*'
 
 
-Install rcb
-^^^^^^^^^^^
+Run the playbook
+""""""""""""""""
+
+.. code-block:: bash
+
+  shell> ansible-playbook rsnapshot.yml
+
+
+3) Install rcb
+^^^^^^^^^^^^^^
 
 Use Ansible roles :l:`vbotka.rcb` and :l:`vbotka.ansible_lib`
 
@@ -82,7 +103,7 @@ Use Ansible roles :l:`vbotka.rcb` and :l:`vbotka.ansible_lib`
 
 
 Download the example of an Ansible project
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""""""""""""""""""""""
 
 Download the examples of the Ansible `playbooks, inventory and configuration <https://github.com/vbotka/rcb/tree/master/ansible>`_
 
@@ -97,20 +118,21 @@ Download the examples of the Ansible `playbooks, inventory and configuration <ht
   └── rcb.yml
 
 The playbooks **rcb.yml** and **rcb-backup-server.yml** configure the
-client(s) and the backup server(s) respectively. The playbook
-**rcb-devel.yml** is used in the development. The file
-**rcb_privatekey_passphrase.yml** keeps the passphrase. It's plain-text
-for the purpose of testing. In production, you might want to encrypt
-it by `Ansible vault <https://docs.ansible.com/ansible/latest/vault_guide/index.html#protecting-sensitive-data-with-ansible-vault>`_
+*rcb-clients* and *rcb-server* respectively (see *Inventory hosts*
+below). The playbook **rcb-devel.yml** is used in the development. The
+file **rcb_privatekey_passphrase.yml** keeps the passphrase. It's
+plain-text for the purpose of testing. In production, you might want
+to encrypt it by `Ansible vault
+<https://docs.ansible.com/ansible/latest/vault_guide/index.html#protecting-sensitive-data-with-ansible-vault>`_
 or any other password management.
 
 
-Configure rcb
-^^^^^^^^^^^^^
+4) Configure rcb
+^^^^^^^^^^^^^^^^
 
 
-ansible.cfg
-"""""""""""
+Configuration ansible.cfg
+"""""""""""""""""""""""""
 
 In the configuration file **ansible.cfg** change **roles_path** to
 where you installed the role :l:`vbotka.rcb`
@@ -119,8 +141,8 @@ where you installed the role :l:`vbotka.rcb`
   :language: ini
 
 
-hosts
-"""""
+Inventory hosts
+"""""""""""""""
 
 In the inventory **hosts**, there are two groups. To test the project,
 there is only one host in each group. Later you might want add more
@@ -147,8 +169,8 @@ Change the below variables in both playbooks:
   * **rcb_bck_group**: The group of the directory *rcb_bck_dst*
 
 
-rcb.yml
-"""""""
+Playbook rcb.yml
+""""""""""""""""
 
 In the playbook **rcb.yml** which will configure the client(s) in the
 inventory group **rcb_clients**, change at least following variables:
@@ -172,8 +194,8 @@ inventory group **rcb_clients**, change at least following variables:
   :language: yaml
 
 
-rcb-backup-server.yml
-"""""""""""""""""""""
+Playbook rcb-backup-server.yml
+""""""""""""""""""""""""""""""
 
 In the playbook **rcb-backup-server.yml** which will configure the
 server(s) in the inventory group **rcb_server**, change at least the
@@ -185,8 +207,14 @@ variable:
   :language: yaml
 
 
-rcb_privatekey_passphrase.yml
-"""""""""""""""""""""""""""""
+.. note::
+
+   You can customize this playbook and depending on the OS install the
+   required :l:`rsync`.
+	     
+
+File rcb_privatekey_passphrase.yml
+""""""""""""""""""""""""""""""""""
 
 Create a file with passphrase to the private key of the client
 certificate
@@ -208,9 +236,11 @@ For later use, the passphrase will be stored in the file
 }}/pem-pass-phrase).
 
 
-.. seealso:: `Protecting sensitive data with Ansible vault <https://docs.ansible.com/ansible/latest/vault_guide/index.html#protecting-sensitive-data-with-ansible-vault>`_
+.. seealso::
+
+   * `Protecting sensitive data with Ansible vault <https://docs.ansible.com/ansible/latest/vault_guide/index.html#protecting-sensitive-data-with-ansible-vault>`_
     
-.. note::
+.. important::
 
    * Enable `DEFAULT_GATHERING
      <https://docs.ansible.com/ansible/latest/reference_appendices/config.html#default-gathering>`_. The variables **ansible_os_family** and **ansible_distribution_\***
@@ -220,7 +250,7 @@ For later use, the passphrase will be stored in the file
 
 
 Review the configuration
-^^^^^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""""
 
 Enable both **rcb_debug** and **rcb_debug_classified**
 
@@ -228,13 +258,13 @@ Enable both **rcb_debug** and **rcb_debug_classified**
   :language: yaml
 
 
-Run Ansible playbooks
-^^^^^^^^^^^^^^^^^^^^^
+5) Run Ansible playbooks
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Following workflow was tested with Ubuntu **rcb_clients** and FreeBSD **rcb_server**.
 
 
-phase1. Create root's SSH keys on the clients
+phase1. Create root's SSH keys on rcb-clients
 """""""""""""""""""""""""""""""""""""""""""""
 
 Create root's SSH keys on the hosts from the inventory group
@@ -249,8 +279,8 @@ group **rcb_clients** will be authorized to ssh to **{{ rcb_bck_user
   shell> ansible-playbook -t phase1 rcb.yml
 
 
-Configure server
-""""""""""""""""
+Configure rcb-server
+""""""""""""""""""""
 
 Create user **{{ rcb_bck_user }}**. Create directories for encrypted
 backups **{{ rcb_bck_dst }}** and to test the encrypted backups **{{
@@ -264,9 +294,10 @@ in phase1, into the **~/.ssh/authorized_keys** of **{{ rcb_bck_user
   shell> ansible-playbook rcb-backup-server.yml
 
 
-phase2. Configure the clients
+phase2. Configure rcb-clients
 """""""""""""""""""""""""""""
 
 .. code-block:: bash
 
   shell> ansible-playbook -t phase2 rcb.yml
+
