@@ -38,6 +38,23 @@ Configure cron
   shell> ansible-playbook -t rcb_cron rcb.yml
 
 
+Creates the crontab
+
+.. code-block:: bash
+
+  shell> crontab -l
+  PATH=/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+  MAILTO=root
+  #Ansible: hourly rcb_rsnapshot
+  15 */4 * * * rcb-rsnapshot.sh -i=hourly
+  #Ansible: daily rcb_rsnapshot
+  15 5 * * * rcb-daily-rsync.sh
+  #Ansible: weekly rcb_rsnapshot
+  15 1 * * 1 rcb-rsnapshot.sh -i=weekly
+  #Ansible: monthly rcb_rsnapshot
+  15 2 1 * * rcb-rsnapshot.sh -i=monthly
+
+
 .. seealso:: The defaults of the Ansible role vbotka.rcb `defaults/main.yml <https://github.com/vbotka/ansible-rcb/blob/master/defaults/main.yml>`_
 
   
@@ -83,7 +100,7 @@ and configure the variables *lp_cron_var* and *lp_cron_tab*
        command: 'rcb-rsnapshot.sh -i=monthly'}
 
 
-Then run the playbook
+The below playbook will create the same crontab
 
 .. code-block:: Bash
 

@@ -44,7 +44,7 @@ Create playbook
 .. code-block:: yaml
 
   shell> cat rsnapshot.yml
-  - hosts: client
+  - hosts: rcb_clients
     become: true
     become_user: root
     become_method: sudo
@@ -210,7 +210,13 @@ For later use, the passphrase will be stored in the file
 
 .. seealso:: `Protecting sensitive data with Ansible vault <https://docs.ansible.com/ansible/latest/vault_guide/index.html#protecting-sensitive-data-with-ansible-vault>`_
     
-.. note:: Enable `DEFAULT_GATHERING <https://docs.ansible.com/ansible/latest/reference_appendices/config.html#default-gathering>`_. The variable **ansible_hostname** is needed to configure **rcb_clients**. Also variables **ansible_os_family** and **ansible_distribution_\*** are needed to customize variables.
+.. note::
+
+   * Enable `DEFAULT_GATHERING
+     <https://docs.ansible.com/ansible/latest/reference_appendices/config.html#default-gathering>`_. The variables **ansible_os_family** and **ansible_distribution_\***
+     are needed to customize variables.
+
+   * The variable **ansible_hostname** is needed to configure **rcb_clients**.
 
 
 Review the configuration
