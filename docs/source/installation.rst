@@ -25,8 +25,8 @@ Two roles are used to install the project:
    * On the *rcb-server*, it's up to you to install :l:`rsync`
 
 
-1) Required collections
-^^^^^^^^^^^^^^^^^^^^^^^
+Required collections
+^^^^^^^^^^^^^^^^^^^^
 
 The roles :l:`vbotka.rcb` and :l:`vbotka.rsnapshot` require collection
 :l:`community.general`. In addition to this, :l:`vbotka.rcb` requires
@@ -40,8 +40,8 @@ latest versions install them
   shell> ansible-galaxy collections install community.general
 
 
-2) Install rsnapshot
-^^^^^^^^^^^^^^^^^^^^
+Install rsnapshot
+^^^^^^^^^^^^^^^^^
 
 Use Ansible role :l:`vbotka.rsnapshot` to install and configure
 *rsnapshot* on the clients.
@@ -91,8 +91,8 @@ Run the playbook
   shell> ansible-playbook rsnapshot.yml
 
 
-3) Install rcb
-^^^^^^^^^^^^^^
+Install rcb
+^^^^^^^^^^^
 
 Use Ansible roles :l:`vbotka.rcb` and :l:`vbotka.ansible_lib`
 
@@ -127,8 +127,8 @@ to encrypt it by `Ansible vault
 or any other password management.
 
 
-4) Configure rcb
-^^^^^^^^^^^^^^^^
+Configure rcb
+^^^^^^^^^^^^^
 
 
 Configuration ansible.cfg
@@ -258,8 +258,8 @@ Enable both **rcb_debug** and **rcb_debug_classified**
   :language: yaml
 
 
-5) Run Ansible playbooks
-^^^^^^^^^^^^^^^^^^^^^^^^
+Run Ansible playbooks
+^^^^^^^^^^^^^^^^^^^^^
 
 Following workflow was tested with Ubuntu **rcb_clients** and FreeBSD **rcb_server**.
 

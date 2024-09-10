@@ -1,6 +1,8 @@
 # RCB (Rsync-Crypto-Backup)
 
-[![license](https://img.shields.io/badge/license-BSD-red.svg)](https://www.freebsd.org/doc/en/articles/bsdl-gpl/article.html) ![Build Status](https://readthedocs.org/projects/rcb/badge/?version=latest)
+[![license](https://img.shields.io/badge/license-BSD-red.svg)](https://www.freebsd.org/doc/en/articles/bsdl-gpl/article.html)
+[![Documentation Status](https://readthedocs.org/projects/rcb/badge/?version=latest)](https://rcb.readthedocs.io/en/latest/?badge=latest)
+[![GitHub tag](https://img.shields.io/github/v/tag/vbotka/rcb)](https://github.com/vbotka/rcb/tags)
 
 [Documentation at ReadTheDoc](http://rcb.readthedocs.io/)
 
@@ -17,14 +19,15 @@ to another machine will have only a small impact on rsync's efficiency.
 
 Installation and configuration was tested with [Ansible role](https://galaxy.ansible.com/vbotka/rcb/)
 
-Supported platforms:
-
-* server: FreeBSD 10.3 -13.2
-* client: Ubuntu 18.04 - 23.04
-
 Feel free to [share your feedback and report issues](https://github.com/vbotka/rcb/issues).
 
 [Contributions are welcome](https://github.com/firstcontributions/first-contributions).
+
+
+## Supported platforms
+
+* server: [FreeBSD Supported Production Releases](https://www.freebsd.org/releases/)
+* client: [Ubuntu Supported Releases](http://releases.ubuntu.com/)
 
 
 ## References
