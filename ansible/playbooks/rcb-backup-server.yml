@@ -6,7 +6,6 @@
   become_method: sudo
 
   vars:
-
     rcb_root_public_keys_dir: copy/rcb-root-ssh-pub-keys
     rcb_bck_dst: /export/rcbackup
     rcb_bck_dst_test: /export/rcbackup-test
@@ -17,10 +16,10 @@
   tasks:
 
     - name: "Create user {{ rcb_bck_user }}"
+      register: rcbuser
       ansible.builtin.user:
         name: "{{ rcb_bck_user }}"
         shell: "{{ rcb_bck_shell }}"
-      register: rcbuser
 
     - name: "Create directories"
       ansible.builtin.file:
@@ -34,21 +33,21 @@
         - "{{ rcb_bck_dst_test }}"
 
     - name: "Debug Public keys"
+      when: debug | d(false) | bool
       ansible.builtin.debug:
         msg: "Public key {{ item }}"
       with_fileglob: "{{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}/*.id_rsa.pub"
       loop_control:
-        label: "{{ item|basename }}"
-      when: debug|d(false)|bool
+        label: "{{ item | basename }}"
 
     - name: "Set up authorized_keys for {{ rcb_bck_user }}
              to {{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}"
       ansible.posix.authorized_key:
         user: "{{ rcb_bck_user }}"
-        key: "{{ lookup('file', '{{ item }}')}}"
+        key: "{{ lookup('file', item) }}"
       with_fileglob: "{{ rcb_root_public_keys_dir }}/{{ inventory_hostname }}/*.id_rsa.pub"
       loop_control:
-        label: "{{ item|basename }}"
+        label: "{{ item | basename }}"
 
 # EOF
 ...

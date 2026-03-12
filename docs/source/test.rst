@@ -1,7 +1,7 @@
 Test
 ====
 
-There are six tasks in the role :l:`vbotka.rcb` to test the
+There are six tasks in the role `vbotka.rcb`_ to test the
 installation on the clients. Each task runs one of the scripts:
 
 * *test1.yml* Create snapshot: *rcb-rsnapshot.sh -i=hourly*
@@ -20,7 +20,7 @@ installation on the clients. Each task runs one of the scripts:
 Configure test in rsnapshot
 ---------------------------
 
-If you enable *rsnapshot_test=true* the role :l:`vbotka.rsnapshot` in
+If you enable *rsnapshot_test=true* the role `vbotka.rsnapshot`_ in
 Ubuntu creates the configuration file
 */usr/local/etc/rsnapshot-test.conf*. For the purpose of testing add
 backup point *rsnapshot_backup_points_test*
@@ -51,13 +51,11 @@ Display the variables
 
 .. note::
 
-  * In the role :l:`vbotka.rsnapshot`, the path to the configuration
-    for testing is stored in the variable
-    *rsnapshot_config_file_test*. Because this path may vary among the
+  * In the role `vbotka.rsnapshot`_, the path to the configuration for testing is stored in
+    the variable *rsnapshot_config_file_test*. Because this path may vary among the
     operating systems the defaults are stored in *vars/defaults*.
 
-  * The default value of *rsnapshot_snapshot_root_test* is
-    */export/backup/snapshots-test*
+  * The default value of *rsnapshot_snapshot_root_test* is /export/backup/snapshots-test*
 
 
 Create the directories for testing and the configuration file
@@ -87,9 +85,9 @@ Display the difference between *rsnapshot-test.conf* and *rsnapshot.conf*
 Configure test in rcb
 ---------------------
 
-By default the role :l:`vbotka.rcb` creates the configuration file
-*/usr/local/etc/rcb-test.conf*. For the purpose of testing add the
-destination of the test backup. For example,
+By default the role `vbotka.rcb`_ creates the configuration file
+*/usr/local/etc/rcb-test.conf*. For the purpose of testing add the destination of the test
+backup. For example,
 
 .. code-block:: yaml
 
@@ -121,9 +119,8 @@ Display the variables
 
 .. note::
 
-  In the role :l:`vbotka.rcb`, the path to all configuration files is
-  stored in the variable *rcb_etc_dir*. The default value
-  */usr/local/etc* is stored in *defaults/main.yml*.
+  In the role `vbotka.rcb`_, the path to all configuration files is stored in the variable
+  *rcb_etc_dir*. The default value */usr/local/etc* is stored in *defaults/main.yml*.
 
 
 Create the directories and the configuration files
@@ -174,11 +171,10 @@ Take a look at */var/log/rcb.log*::
   Mon 02 Oct 2023 09:22:04 PM CEST [OK] *** hourly backup finished
 
 
-.. note:: The default directory to test the backup is
-   */scratch/rcb-test*. If you configured other directory in the
-   variable *rsnapshot_backup_points_test*, used to create
-   */usr/local/etc/rsnapshot-test.conf*, configure *rcb_test_dir*. See
-   the file *tasks/test1.yml*.
+.. note:: The default directory to test the backup is */scratch/rcb-test*. If you
+   configured other directory in the variable *rsnapshot_backup_points_test*, used to
+   create */usr/local/etc/rsnapshot-test.conf*, configure *rcb_test_dir*. See the file
+   *tasks/test1.yml*.
 
 
 test2: Encrypt snapshots
@@ -289,3 +285,15 @@ You can run all test in one play
 .. code-block:: bash
 
   shell> ansible-playbook -e rcb_test=true -t testall rcb.yml
+
+
+.. _RCB (Rsync-Crypto-Backup): https://github.com/vbotka/rcb/
+.. _rsnapshot: https://rsnapshot.org/
+.. _rsyncrypto: https://rsyncrypto.lingnu.com/
+.. _rsync: https://rsync.samba.org/
+.. _vbotka.linux_postinstall: https://galaxy.ansible.com/ui/standalone/roles/vbotka/linux_postinstall/
+.. _vbotka.rcb: https://galaxy.ansible.com/ui/standalone/roles/vbotka/rcb/
+.. _vbotka.rsnapshot: https://galaxy.ansible.com/ui/standalone/roles/vbotka/rsnapshot/
+.. _vbotka.ansible_lib: https://galaxy.ansible.com/ui/standalone/roles/vbotka/ansible_lib/
+.. _community.general: https://github.com/ansible-collections/community.general
+.. _community.crypto: https://github.com/ansible-collections/community.crypto

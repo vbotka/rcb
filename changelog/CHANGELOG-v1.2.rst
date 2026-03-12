@@ -4,6 +4,22 @@ rcn 1.2 Release Notes
 
 .. contents:: Topics
 
+1.2.1
+=====
+
+Release Summary
+---------------
+Maintenance update
+
+Major Changes
+-------------
+
+Minor Changes
+-------------
+* Update playbook ansible/playbooks/rcb-backup-server.yml
+* Update docs.
+
+
 1.2.0
 =====
 
