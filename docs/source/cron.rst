@@ -3,7 +3,7 @@ cron
 
 There are more options how to configure cron:
 
-1) Use Ansible role :l:`vbotka.rcb`
+1) Use Ansible role `vbotka.rcb`_
 
 Default value is *rcb_rsnapshot_cron=false*. This means crontab will
 not be configured by default. Set *rcb_rsnapshot_cron=true* and
@@ -58,12 +58,11 @@ Creates the crontab
 .. seealso:: The defaults of the Ansible role vbotka.rcb `defaults/main.yml <https://github.com/vbotka/ansible-rcb/blob/master/defaults/main.yml>`_
 
   
-2) Use Ansible role :l:`vbotka.linux_postinstall`
+2) Use Ansible role `vbotka.linux_postinstall`_
 
-If the system is Linux the systemic way is to keep
-*rcb_rsnapshot_cron=false* and configure all crontab entries of the
-system with Ansible role :l:`vbotka.linux_postinstall`. To use this
-role, install it
+If the system is Linux the systemic way is to keep *rcb_rsnapshot_cron=false* and configure all
+crontab entries of the system with Ansible role `vbotka.linux_postinstall`_. To use this role,
+install it
 
 .. code-block:: Bash
 
@@ -113,3 +112,14 @@ The below playbook will create the same crontab
 3) Manual configuration of cron
 
 For manual configuration of cron RCB project provides `crontab example <https://github.com/vbotka/rcb/blob/master/crontab.example>`_ .
+
+.. _RCB (Rsync-Crypto-Backup): https://github.com/vbotka/rcb/
+.. _rsnapshot: https://rsnapshot.org/
+.. _rsyncrypto: https://rsyncrypto.lingnu.com/
+.. _rsync: https://rsync.samba.org/
+.. _vbotka.linux_postinstall: https://galaxy.ansible.com/ui/standalone/roles/vbotka/linux_postinstall/
+.. _vbotka.rcb: https://galaxy.ansible.com/ui/standalone/roles/vbotka/rcb/
+.. _vbotka.rsnapshot: https://galaxy.ansible.com/ui/standalone/roles/vbotka/rsnapshot/
+.. _vbotka.ansible_lib: https://galaxy.ansible.com/ui/standalone/roles/vbotka/ansible_lib/
+.. _community.general: https://github.com/ansible-collections/community.general
+.. _community.crypto: https://github.com/ansible-collections/community.crypto
